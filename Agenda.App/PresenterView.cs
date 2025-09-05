@@ -1,0 +1,32 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using Avalonia.Controls;
+
+namespace Agenda.App;
+
+public class PresenterView
+{
+    public ContentControl View;
+    
+    private Manager _manager;
+    private Dictionary<string, Func<Manager, UserControl>> _views = new Dictionary<string, Func<Manager, UserControl>>();
+
+    public PresenterView(Manager manager)
+    {
+        View = new ContentControl();
+        _manager = manager;
+    }
+    
+    public void Add(string name, Func<Manager, UserControl> view)
+    {
+        if (_views.ContainsKey(name)) throw new DuplicateNameException($"View {name} has already been added");
+        _views.Add(name, view);
+    }
+
+    public void LoadNew(string name)
+    {
+        if (!_views.ContainsKey(name)) throw new Exception($"View {name} was not found");
+        View.Content = _views[name](_manager);
+    }
+}
