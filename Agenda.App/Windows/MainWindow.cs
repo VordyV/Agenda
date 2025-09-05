@@ -7,16 +7,13 @@ using Ursa.Controls;
 
 namespace Agenda.App.Windows;
 
-public partial class MainWindow : Window
+public class MainWindow : BaseWindow
 {
-    private Manager _manager;
-    private PresenterView _presenterView;
-
     private Menu _uiMenu;
     private MenuItem _uiMenuItem_Servers;
     private Grid _uiGridMain;
 
-    private Control LoadUi()
+    public override Control LoadUi()
     {
         _uiMenuItem_Servers = new MenuItem() { Header = "Servers" };
         _uiMenu = new Menu()
@@ -32,25 +29,20 @@ public partial class MainWindow : Window
         };
         
         Grid.SetRow(_uiMenu, 0);
-        Grid.SetRow(_presenterView.View, 1);
+        Grid.SetRow(this.PresenterView.View, 1);
         
         _uiGridMain.Children.Add(_uiMenu);
-        _uiGridMain.Children.Add(_presenterView.View);
+        _uiGridMain.Children.Add(this.PresenterView.View);
 
-        _uiMenuItem_Servers.Click += (_, _) => _presenterView.LoadNew("servers");
-
+        _uiMenuItem_Servers.Click += (_, _) => this.PresenterView.LoadNew("servers");
+        
         return _uiGridMain;
     }
 
-    public MainWindow(Manager manager)
+    public MainWindow(Manager manager) : base(manager)
     {
-        _manager = manager;
-        _presenterView = new PresenterView(manager: _manager);
-        _presenterView.Add("main", m => new MainView(m));
-        _presenterView.Add("servers", m => new ServersView(m));
-
-        _presenterView.LoadNew("main");
-        
-        Content = LoadUi();
+        this.PresenterView.Add("main", m => new MainView(m));
+        this.PresenterView.Add("servers", m => new ServersView(m));
+        this.PresenterView.LoadNew("servers");
     }
 }

@@ -1,15 +1,23 @@
-﻿using Avalonia.Controls;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using Avalonia.Controls;
+using Avalonia.Data;
+using Avalonia.Layout;
+using ursa = Ursa.Controls;
 
 namespace Agenda.App.Views;
 
-public class ServersView : UserControl
+public class ServersView : BaseView
 {
-    private Manager _manager;
+    private TextBlock _uiTextBlock;
     
-    public ServersView(Manager manager)
+    public override Control LoadUi()
     {
-        _manager = manager;
+        _uiTextBlock = new TextBlock();
+        _uiTextBlock.Text = "11";
         
-        Content = new TextBlock() { Text = "000" };
+        return _uiTextBlock;
     }
+    
+    public ServersView(Manager manager) : base(manager) { }
 }
