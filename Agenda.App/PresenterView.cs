@@ -10,7 +10,7 @@ public class PresenterView
     public ContentControl View;
     
     private Manager _manager;
-    private Dictionary<string, Func<Manager, UserControl>> _views = new Dictionary<string, Func<Manager, UserControl>>();
+    private Dictionary<string, Func<Manager, PresenterView, object?, UserControl>> _views = new Dictionary<string, Func<Manager, PresenterView, object?, UserControl>>();
 
     public PresenterView(Manager manager)
     {
@@ -18,15 +18,15 @@ public class PresenterView
         _manager = manager;
     }
     
-    public void Add(string name, Func<Manager, UserControl> view)
+    public void Add(string name, Func<Manager, PresenterView, object?, UserControl> view)
     {
         if (_views.ContainsKey(name)) throw new DuplicateNameException($"View {name} has already been added");
         _views.Add(name, view);
     }
 
-    public void LoadNew(string name)
+    public void LoadNew(string name, object? arg = null)
     {
         if (!_views.ContainsKey(name)) throw new Exception($"View {name} was not found");
-        View.Content = _views[name](_manager);
+        View.Content = _views[name](_manager, this, arg);
     }
 }
