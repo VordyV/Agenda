@@ -5,11 +5,13 @@ namespace Agenda.App;
 public abstract class BaseView : UserControl
 {
     public Manager Manager { get; set; }
-    public abstract Control LoadUi();
+    public PresenterView PresenterView { get; set; }
+    public abstract void SetupUi();
     
-    public BaseView(Manager manager)
+    public BaseView(Manager manager, PresenterView presenterView)
     {
         Manager = manager;
-        Content = LoadUi();
+        PresenterView = presenterView;
+        SetupUi();
     }
 }
