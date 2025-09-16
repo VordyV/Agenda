@@ -1,0 +1,19 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:c="clr-namespace:Agenda.App.Controls"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             xmlns:vm="clr-namespace:Agenda.App.Models"
+             x:DataType="vm:ServersViewModel"
+             x:Class="Agenda.App.Views.ServersView">
+  <Border Padding="30 0">
+    <Grid RowDefinitions="Auto, *" ColumnDefinitions="*, *">
+      <TextBlock Grid.Row="0" Grid.Column="0" Padding="0 13" Text="Servers" Theme="{StaticResource TitleTextBlock}" Classes="H3"/>
+      <Button Grid.Row="0" Grid.Column="1" Command="{Binding GoServer}" Content="Add a new" Theme="{DynamicResource SolidButton}" HorizontalAlignment="Right"/>
+      <WrapPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
+        <c:ServerForm Title="1222" SubTitle="RCON BF2CC" Width="380" Height="200"/>
+      </WrapPanel>
+    </Grid>
+  </Border>
+</UserControl>

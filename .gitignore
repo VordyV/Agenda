@@ -22,3 +22,4 @@ bld/
 # Rider
 .idea/
 *.sln.iml
+./Agenda.sln.DotSettings.user

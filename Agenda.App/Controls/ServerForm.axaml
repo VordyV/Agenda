@@ -1,0 +1,31 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="using:Agenda.App.Controls">
+  <Design.PreviewWith>
+    <controls:ServerForm />
+  </Design.PreviewWith>
+
+  <Style Selector="controls|ServerForm">
+    <!-- Set Defaults -->
+    <Setter Property="Template">
+      <ControlTemplate>
+
+        <Border Theme="{StaticResource CardBorder}">
+          <Grid RowDefinitions="Auto, Auto, *, Auto">
+            <TextBlock Grid.Row="0" Padding="0 6 0 6" Text="{TemplateBinding Title}" Theme="{StaticResource TitleTextBlock}" Classes="H4"/>
+            <TextBlock Grid.Row="1" Padding="0 6 0 6" Text="{TemplateBinding SubTitle}" Classes="Quaternary"/>
+            <SplitButton Grid.Row="3" Content="Connect" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+              <SplitButton.Flyout>
+                <MenuFlyout Placement="Bottom">
+                  <MenuItem Header="Edit"/>
+                  <MenuItem Header="Remove"/>
+                </MenuFlyout>
+              </SplitButton.Flyout>
+            </SplitButton>
+          </Grid>
+        </Border>
+       
+      </ControlTemplate>
+    </Setter>
+  </Style>
+</Styles>

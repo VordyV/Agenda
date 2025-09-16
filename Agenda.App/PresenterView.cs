@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Data;
 using Avalonia.Controls;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace Agenda.App;
 
-public class PresenterView
+public class PresenterView : ObservableObject
 {
     public ContentControl View;
     
