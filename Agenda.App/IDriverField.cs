@@ -8,5 +8,5 @@ public interface IDriverField
     Control GetControl();
     string? GetValue();
     void SetValue(object? value);
-    bool Validate(string value);
+    bool Validate();
 }
