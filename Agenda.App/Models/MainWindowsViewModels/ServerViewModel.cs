@@ -118,10 +118,17 @@ public partial class ServerViewModel : ObservableObject, INotifyDataErrorInfo
     private bool Validate()
     {
         ClearErrors(nameof(NameField));
+        ServerFormBuilder.ClearErrors();
         
         if (string.IsNullOrWhiteSpace(NameField))
         {
             AddError(nameof(NameField), "name cannot be empty");
+            return false;
+        }
+        
+        if (_server == null && _manager.Config.FindRepeatByName(NameField))
+        {
+            AddError(nameof(NameField), "name is occupied");
             return false;
         }
 
@@ -136,6 +143,8 @@ public partial class ServerViewModel : ObservableObject, INotifyDataErrorInfo
             AddError(nameof(NameField), "name must be less than 3 characters long");
             return false;
         }
+        
+        if (!ServerFormBuilder.Validate()) return false;
         
         return true;
     }
