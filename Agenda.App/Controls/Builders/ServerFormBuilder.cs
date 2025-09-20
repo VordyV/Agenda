@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -42,6 +43,23 @@ public class ServerFormBuilder : UserControl
         return result;
     }
 
+    public bool Validate()
+    {
+        foreach (var field in _fieldControls)
+        {
+            try
+            {
+                field.Value.Validate();
+            }
+            catch (Exception e)
+            {
+                SetError(field.Key, e.Message);
+                return false;
+            }
+        }
+        return true;
+    }
+
     public void SetValues(Dictionary<string, string?> options)
     {
         foreach (var option in options)
@@ -55,5 +73,13 @@ public class ServerFormBuilder : UserControl
     {
         var field = _fieldControls[fieldName];
         DataValidationErrors.SetErrors(field.GetControl(), new object[] { error });
+    }
+
+    public void ClearErrors()
+    {
+        foreach (var field in _fieldControls)
+        {
+            DataValidationErrors.ClearErrors(field.Value.GetControl());
+        }
     }
 }
