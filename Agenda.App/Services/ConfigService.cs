@@ -24,4 +24,6 @@ public class ConfigService
     public void Add(ServerItem server) => _collectionServer.Insert(server);
     public void Update(ServerItem server) => _collectionServer.Update(server);
     public void Delete(int id) => _collectionServer.Delete(id);
+
+    public bool FindRepeatByName(string serverName) => _collectionServer.FindOne(x => x.Name == serverName) != null;
 }
