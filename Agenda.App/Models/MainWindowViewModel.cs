@@ -15,7 +15,7 @@ public class MainWindowViewModel : ObservableObject
         _manager = manager;
         _presenterView = new PresenterView(_manager);
         _presenterView.Add("servers", (m, v, a) => new ServersView() {DataContext = new ServersViewModel(m, v)});
-        _presenterView.Add("server", (m, v, a) => new ServerView() {DataContext = new ServerViewModel(m, v)});
+        _presenterView.Add("server", (m, v, a) => new ServerView() {DataContext = new ServerViewModel(m, v, a)});
         _presenterView.LoadNew("servers");
     }
 

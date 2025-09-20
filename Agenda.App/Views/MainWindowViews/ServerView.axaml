@@ -4,7 +4,54 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              xmlns:vm="clr-namespace:Agenda.App.Models"
+             xmlns:u="https://irihi.tech/ursa"
              x:DataType="vm:ServerViewModel"
              x:Class="Agenda.App.Views.ServerView">
-  <Button Command="{Binding GoServers}">Servers</Button>
+  
+  <Border Padding="30 0">
+    <StackPanel>
+      <!-- Title page -->
+      <TextBlock Padding="0 13" Text="{Binding Title}" Theme="{StaticResource TitleTextBlock}" Classes="H3"/>
+      
+      <Border Theme="{StaticResource CardBorder}">
+        <StackPanel>
+          <!-- Sub title 1 -->
+          <TextBlock Padding="0 13" Text="Basic data" Theme="{StaticResource TitleTextBlock}" Classes="H4"/>
+          
+          <!-- Main fields -->
+          <UniformGrid Columns="2" ColumnSpacing="8" RowSpacing="8">
+            <!-- NAME SERVER -->
+            <TextBox Watermark="Name" HorizontalAlignment="Stretch" Text="{Binding NameField}"/>
+            
+            <!-- TYPE SERVER -->
+            <ComboBox HorizontalAlignment="Stretch" ItemsSource="{Binding Types}" SelectedItem="{Binding SelectedServerType}" IsEnabled="{Binding IsEnableType}">
+              <ComboBox.ItemTemplate>
+                <DataTemplate>
+                  <TextBlock Text="{Binding Name}" />
+                </DataTemplate>
+              </ComboBox.ItemTemplate>
+            </ComboBox>
+            
+          </UniformGrid>
+          
+          <!-- Sub title 2 -->
+          <TextBlock Padding="0 13" Text="Credentials" Theme="{StaticResource TitleTextBlock}" Classes="H4"/>
+          
+          <!-- Gen fields -->
+          <ContentControl Content="{Binding ServerFormBuilder}"/>
+          
+          <u:Divider Margin="0 24"/>
+          
+          <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Right">
+            <Button Content="Remove" Command="{Binding OnClickRemove}" IsVisible="{Binding IsVisibleRemove}"/>
+            <Button Content="Cancel" Command="{Binding OnClickCancel}"/>
+            <Button Content="Save" Theme="{DynamicResource SolidButton}" Command="{Binding OnClickSave}"/>
+          </StackPanel>
+          
+        </StackPanel>
+      </Border>
+      
+    </StackPanel>
+  </Border>
+  
 </UserControl>

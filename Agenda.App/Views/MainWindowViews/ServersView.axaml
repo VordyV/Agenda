@@ -11,9 +11,24 @@
     <Grid RowDefinitions="Auto, *" ColumnDefinitions="*, *">
       <TextBlock Grid.Row="0" Grid.Column="0" Padding="0 13" Text="Servers" Theme="{StaticResource TitleTextBlock}" Classes="H3"/>
       <Button Grid.Row="0" Grid.Column="1" Command="{Binding GoServer}" Content="Add a new" Theme="{DynamicResource SolidButton}" HorizontalAlignment="Right"/>
-      <WrapPanel Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
+      
+      <ItemsControl Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" ItemsSource="{Binding Servers}">
+        <ItemsControl.ItemsPanel>
+          <ItemsPanelTemplate>
+            <WrapPanel />
+          </ItemsPanelTemplate>
+        </ItemsControl.ItemsPanel>
+        
+        <ItemsControl.ItemTemplate>
+          <DataTemplate>
+            <c:ServerForm Title="{Binding Name}" SubTitle="{Binding TypeName}" CommandParameter="{Binding}" CommandEdit="{Binding $parent[UserControl].((vm:ServersViewModel)DataContext).OnClickEdit}" CommandRemove="{Binding $parent[UserControl].((vm:ServersViewModel)DataContext).OnClickRemove}" Width="380" Height="200"/>
+          </DataTemplate>
+        </ItemsControl.ItemTemplate>
+      </ItemsControl>
+      
+      <!-- <WrapPanel >
         <c:ServerForm Title="1222" SubTitle="RCON BF2CC" Width="380" Height="200"/>
-      </WrapPanel>
+      </WrapPanel> -->
     </Grid>
   </Border>
 </UserControl>

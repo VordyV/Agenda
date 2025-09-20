@@ -12,13 +12,13 @@
 
         <Border Theme="{StaticResource CardBorder}">
           <Grid RowDefinitions="Auto, Auto, *, Auto">
-            <TextBlock Grid.Row="0" Padding="0 6 0 6" Text="{TemplateBinding Title}" Theme="{StaticResource TitleTextBlock}" Classes="H4"/>
-            <TextBlock Grid.Row="1" Padding="0 6 0 6" Text="{TemplateBinding SubTitle}" Classes="Quaternary"/>
-            <SplitButton Grid.Row="3" Content="Connect" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+            <SelectableTextBlock Grid.Row="0" Padding="0 6 0 6" Text="{TemplateBinding Title}" Theme="{StaticResource TitleSelectableTextBlock}" Classes="H4"/>
+            <SelectableTextBlock Grid.Row="1" Padding="0 6 0 6" Text="{TemplateBinding SubTitle}" Classes="Quaternary"/>
+            <SplitButton Grid.Row="3" Name="PART_Button_Connect" Content="Connect" HorizontalAlignment="Right" VerticalAlignment="Bottom">
               <SplitButton.Flyout>
                 <MenuFlyout Placement="Bottom">
-                  <MenuItem Header="Edit"/>
-                  <MenuItem Header="Remove"/>
+                  <MenuItem Header="Edit" Name="PART_MenuItem_Edit"/>
+                  <MenuItem Header="Remove" Name="PART_MenuItem_Remove"/>
                 </MenuFlyout>
               </SplitButton.Flyout>
             </SplitButton>

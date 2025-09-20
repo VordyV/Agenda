@@ -7,8 +7,8 @@
              <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 
     <Application.Styles>
-      <semi:SemiTheme Locale="zh-CN" />
-      <u-semi:SemiTheme Locale="zh-CN"/>
+      <semi:SemiTheme Locale="en-US" />
+      <u-semi:SemiTheme Locale="en-US"/>
       <StyleInclude Source="avares://Agenda.App/Controls/ServerForm.axaml"></StyleInclude>
     </Application.Styles>
 </Application>
