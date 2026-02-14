@@ -1,0 +1,16 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="300"
+             xmlns:u="https://irihi.tech/ursa"
+             x:Class="Agenda.Forms.ConnectionIndicatorForms.ProcessIndicatorForm">
+    <Border Width="350" Height="200" Padding="10 12">
+        <Grid RowDefinitions="*, *, *, *">
+            <u:LoadingIcon Grid.Row="0" Classes="Large" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <TextBlock Grid.Row="1" Name="TextBlockStatus" Text="Status" Classes="H6" Theme="{StaticResource TitleTextBlock}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <TextBlock Grid.Row="2" Name="TextBlockText" Text="Establishing a secure connection" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <Button Grid.Row="3" Name="ButtonCancel" Content="Cancel" Theme="{StaticResource OutlineButton}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        </Grid>
+    </Border>
+</UserControl>

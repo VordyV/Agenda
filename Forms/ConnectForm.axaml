@@ -1,0 +1,22 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="430" d:DesignHeight="450"
+             xmlns:u="https://irihi.tech/ursa"
+             x:Class="Agenda.Forms.ConnectForm">
+    <Border Padding="12 10">
+        <Grid Width="400" RowDefinitions="*, Auto">
+            <StackPanel Grid.Row="0" Name="tt">
+                <TextBlock Text="Direct connection" Classes="H5" Theme="{StaticResource TitleTextBlock}" Margin="0 0 0 10"/>
+                <!--<TextBlock Text="Create a session without a pre-added profile" Margin="0 0 0 10"/>-->
+                <u:Form Name="FormProfile" LabelPosition="Top" LabelWidth="*">
+                    <ComboBox Name="ComboBoxType" SelectionChanged="ComboBoxType_OnSelectionChanged" Width="400" u:FormItem.Label="Type" u:FormItem.IsRequired="True"/>
+                </u:Form>
+                <u:Divider Name="Divider" Content="Options"/>
+                <u:Form Name="FormDynamic" LabelPosition="Top" LabelWidth="*"/>
+            </StackPanel>
+            <Button Grid.Row="1" Click="Button_OnClick" HorizontalAlignment="Right" Content="Connect" Theme="{StaticResource SolidButton}"/>
+        </Grid>
+    </Border>
+</UserControl>

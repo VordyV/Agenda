@@ -1,0 +1,18 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="700" d:DesignHeight="450"
+             xmlns:u="https://irihi.tech/ursa"
+             x:Class="Agenda.Views.HomeView">
+    <Grid RowDefinitions="Auto, *">
+        <!-- HEADER -->
+        <Grid ColumnDefinitions="Auto, *, Auto" Margin="12 10">
+            <TextBlock Grid.Column="0" Classes="H5" Theme="{StaticResource TitleTextBlock}">Profile list</TextBlock>
+            <Button Grid.Column="2" Name="AddNewProfile" Click="AddNewProfile_OnClick" Content="Add new profile" Theme="{StaticResource SolidButton}" />
+        </Grid>
+        
+        <!-- BODY -->
+        <TextBlock Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">Wait, have some tea, there's nothing here yet</TextBlock>
+    </Grid>
+</UserControl>
