@@ -8,6 +8,7 @@ namespace Agenda.Core;
 public abstract class BasicDriver
 {
     public string Id { get; private set; }
+    public string ModuleId { get; private set; }
     public Dictionary<string, object?> Fields { get; private set; }
 
     public DriverState State { get; private set; } = new DriverState()
@@ -20,13 +21,15 @@ public abstract class BasicDriver
     private CancellationTokenSource _cancelTokenSource = new CancellationTokenSource();
     public CancellationToken Token => this._cancelTokenSource.Token;
 
-    public BasicDriver(string id, Dictionary<string, object?> fields)
+    public BasicDriver(string id, string moduleId, Dictionary<string, object?> fields)
     {
         this.Id = id;
+        this.ModuleId = moduleId;
+        this.ModuleId = moduleId;
         this.Fields = fields;
     }
     
-    public virtual async Task OnStart() {}
+    public virtual async Task OnStart(InitContext ctx) {}
     public virtual async Task OnStop() {}
     
     public virtual async Task OnLoop() {}

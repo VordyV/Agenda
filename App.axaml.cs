@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Agenda.Core;
+using Agenda.Forms;
+using Agenda.Forms.ConnectionIndicatorForms;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using Ursa.Controls;
 
 namespace Agenda;
 

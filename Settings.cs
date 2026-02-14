@@ -21,7 +21,7 @@ public static class Settings
                 new ModuleField(id: "address", title: "Address", control: () => new IPv4FieldControl(), required: true, validator: (data) => new ModuleFieldValidator(length: 15).Validate(data)),
                 new ModuleField(id: "query_port", title: "Query port", control: () => new IntFieldControl(min: 1.0m, max: 65535.0m), required: true, validator: (data) => new ModuleFieldValidator(maxNum: 65535, minNum: 1).Validate(data))
             ],
-            driver: (id, fields) => new SimpleModule.Driver(id, fields)
+            driver: (id, moduleId, fields) => new SimpleModule.Driver(id, moduleId, fields)
         ),
         new Module(
             id: "rconbf2142default",
@@ -34,7 +34,7 @@ public static class Settings
                 new ModuleField(id: "rcon_port", title: "Rcon port", control: () => new IntFieldControl(min: 1.0m, max: 65535.0m), required: true, validator: (data) => new ModuleFieldValidator(maxNum: 65535, minNum: 1).Validate(data)),
                 new ModuleField(id: "rcon_password", title: "Rcon password", control: () => new PasswordFieldControl(), required: true, validator: (data) => new ModuleFieldValidator(length: 128).Validate(data))
             ],
-            driver: (id, fields) => new RconBF2142DefaultModule.Driver(id, fields)
+            driver: (id, moduleId, fields) => new RconBF2142DefaultModule.Driver(id, moduleId, fields)
         )
     };
 }

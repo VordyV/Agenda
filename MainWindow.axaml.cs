@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Agenda.Controls;
 using Agenda.Core;
 using Agenda.Forms;
+using Agenda.Forms.ConnectionIndicatorForms;
 using Agenda.Views;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
@@ -37,6 +39,8 @@ public partial class MainWindow : Window
         InitializeComponent();
         
         this.MainContent.Content = this._viewPresenter.Content;
+        
+        this._manager.OnInit += this.OnCreateInit;
     }
 
     private void _onLoadView(Manager manager, ViewPresenter presenter, object? arg)
@@ -50,5 +54,29 @@ public partial class MainWindow : Window
     {
         var context = new DialogContext();
         OverlayDialog.ShowCustom(new ConnectForm(this._manager, this._viewPresenter) {DataContext = context}, context, hostId: "main", new OverlayDialogOptions() {CanDragMove = false, CanResize = false});
+    }
+    
+    public async void OnCreateInit(string connId, InitContext ctx)
+    {
+        var conn = this._manager.GetConnection(connId);
+        var ctxPcsForm = new DialogContext();
+        var form = new ProcessIndicatorForm() {DataContext = ctxPcsForm};
+
+        ctx.OnAction += async (s, t, c) =>
+        {
+            form.SetStatus(s);
+            form.SetText(t);
+            if (c != null) ctxPcsForm.Close();
+            if (c == true)
+            {
+                this._viewPresenter.LoadView("server", connId);
+            } else if (c == false)
+            {
+                var ctxErrForm = new DialogContext();
+                OverlayDialog.ShowCustom(new ErrorIndicatorForm(s, t, async (o, args) => ctxErrForm.Close()) {DataContext = ctxErrForm}, ctxErrForm, hostId: "main");
+            }
+        };
+        
+        await OverlayDialog.ShowCustomModal<bool>(form, ctxPcsForm, hostId: "main", new OverlayDialogOptions() {IsCloseButtonVisible = false});
     }
 }

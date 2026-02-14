@@ -8,14 +8,18 @@ namespace Agenda.Modules.SimpleModule;
 public class Driver : BasicDriver
 {
 
-    public Driver(string id, Dictionary<string, object?> fields) : base(id, fields)
+    public Driver(string id, string moduleId, Dictionary<string, object?> fields) : base(id, moduleId, fields)
     {
     }
 
-    public override async Task OnStart()
+    public override async Task OnStart(InitContext ctx)
     {
         Console.WriteLine("1");
-        await Task.Delay(3000);
+        ctx.Action("1", "11");
+        await Task.Delay(1000);
+        ctx.Action("2", "22");
+        await Task.Delay(1000);
+        //throw new InitException("rA9", "Connor didn't show up to Amanda's");
     }
 
     public override async Task OnStop()

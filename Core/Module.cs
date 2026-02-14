@@ -11,9 +11,9 @@ public class Module
     public string Version { get; private set; }
     public Func<UserControl> View { get; private set; }
     public Dictionary<string, ModuleField> Fields;
-    public Func<string, Dictionary<string, object?>, BasicDriver> Driver { get; private set; }
+    public Func<string, string, Dictionary<string, object?>, BasicDriver> Driver { get; private set; }
 
-    public Module(string id, string title, string version, Func<UserControl> view, List<ModuleField> fields, Func<string, Dictionary<string, object?>, BasicDriver> driver)
+    public Module(string id, string title, string version, Func<UserControl> view, List<ModuleField> fields, Func<string, string, Dictionary<string, object?>, BasicDriver> driver)
     {
         this.Id = id;
         this.Title = title;

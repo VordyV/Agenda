@@ -14,4 +14,7 @@ public partial class ProcessIndicatorForm : UserControl
     {
         InitializeComponent();
     }
+
+    public void SetStatus(string text) => this.TextBlockStatus.Text = text;
+    public void SetText(string text) => this.TextBlockText.Text = text;
 }

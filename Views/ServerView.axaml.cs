@@ -19,8 +19,7 @@ public partial class ServerView : UserControl
         this._presenter = presenter;
         if (connId is string) this._connId = (string)connId;
         InitializeComponent();
-
-        this._manager.InitConnection(this._connId);
+        this.T.Text = this._connId;
     }
     
 }

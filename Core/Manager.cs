@@ -5,13 +5,19 @@ using System.Threading.Tasks;
 
 namespace Agenda.Core;
 
+public class InitContext
+{
+    public event Action<string, string, bool?> OnAction;
+    public void Action(string status, string text, bool? connect = null) => this.OnAction?.Invoke(status, text, connect);
+}
+
 public class Manager
 {
     private Dictionary<string, Module> _modules = new();
     private Dictionary<string, BasicDriver> _connections = new();
     
     public event Action<string> OnCreate;
-    public event Action<string, BasicDriver> OnInit;
+    public event Action<string, InitContext> OnInit;
     public event Action<string, DriverState?, bool?> OnChangeStatus;
 
     public void RegisterModule(Module module)
@@ -48,7 +54,7 @@ public class Manager
         Guid uuid = Guid.NewGuid();
         string connId = uuid.ToString("N");
 
-        this._connections.Add(connId, module.Driver.Invoke(connId, fields));
+        this._connections.Add(connId, module.Driver.Invoke(connId, moduleId, fields));
         this.OnCreate?.Invoke(connId);
         
         return connId;
@@ -60,23 +66,40 @@ public class Manager
         this.OnChangeStatus?.Invoke(driver.Id, state, connected);
     }
 
-    public async Task InitConnection(string connId)
+    public async Task<bool> InitConnection(string connId)
     {
         BasicDriver driver = GetConnection(connId);
-        this.OnInit?.Invoke(connId, driver);
+        InitContext ctx = new InitContext();
+        this.OnInit?.Invoke(driver.Id, ctx);
         try
         {
-            this.SetState(driver, new DriverState() {Type = TypeDriverState.Starting});
-            await driver.OnStart();
-            this.SetState(driver, new DriverState() { Type = TypeDriverState.Running }, connected: true);
+            this.SetState(driver, new DriverState()
+            {
+                Type = TypeDriverState.Starting
+            });
+            await driver.OnStart(ctx);
+            this.SetState(driver, new DriverState()
+            {
+                Type = TypeDriverState.Running
+            }, connected: true);
+            ctx.Action("", "", true);
+            Task task = Task.Run(() => this._startConnLoop(driver));
+            return true;
+        }
+        catch (InitException e)
+        {
+            this.SetState(driver, new DriverState() {Type = TypeDriverState.Error, ErrorDetail = e.Message});
+            ctx.Action(e.Title, e.Message, false);
         }
         catch (Exception e)
         {
             this.SetState(driver, new DriverState() {Type = TypeDriverState.Error, ErrorDetail = e.Message});
-            throw;
+            ctx.Action("Error 0_o", e.Message, false);
+            //throw;
         }
-
-        Task task = Task.Run(() => this._startConnLoop(driver));
+        this._connections.Remove(connId);
+        return false;
+        //Task task = Task.Run(() => this._startConnLoop(driver));
     }
 
     public async Task CloseConnection(string connId)

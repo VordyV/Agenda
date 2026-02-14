@@ -118,9 +118,10 @@ public partial class ConnectForm : UserControl
         if (!isRun) return;
         
         var connId = this._manager.CreateNewConnection(this._currentModule.Id, fields);
-        
+
+        if (await this._manager.InitConnection(connId) && DataContext is IDialogContext ctx)  ctx.Close();
         //this._presenter.LoadView("server", connId);
-        
+
         //if (DataContext is IDialogContext ctx) ctx.Close();
     }
 }
