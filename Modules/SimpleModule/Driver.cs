@@ -16,9 +16,9 @@ public class Driver : BasicDriver
     {
         Console.WriteLine("1");
         ctx.Action("1", "11");
-        await Task.Delay(1000);
+        await Task.Delay(1000, this.Token);
         ctx.Action("2", "22");
-        await Task.Delay(1000);
+        await Task.Delay(1000, this.Token);
         //throw new InitException("rA9", "Connor didn't show up to Amanda's");
     }
 

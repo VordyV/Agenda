@@ -7,9 +7,9 @@
              x:Class="Agenda.Forms.ConnectionIndicatorForms.ErrorIndicatorForm">
     <Border Width="350" Height="200" Padding="10 12">
         <Grid RowDefinitions="*, Auto" RowSpacing="7">
-            <Border Grid.Row="0" BorderBrush="#FA676E" Background="#50FA676E" Theme="{StaticResource CardBorder}" Padding="10 12">
-                <Grid RowDefinitions="Auto, *" ColumnDefinitions="Auto, *" ColumnSpacing="7" RowSpacing="7">
-                    <PathIcon Name="PathIconError" Grid.Row="0" Grid.Column="0" Foreground="#FA676E" Data="{StaticResource SemiIconActivity}"/>
+            <Border Grid.Row="0" BorderBrush="#FA676E" Background="#50FA676E" Theme="{StaticResource CardBorder}" Padding="12 12">
+                <Grid RowDefinitions="Auto, *" ColumnDefinitions="Auto, *" ColumnSpacing="12" RowSpacing="12">
+                    <PathIcon Name="PathIconError" Grid.Row="0" Grid.Column="0" Foreground="#FA676E" Data="{StaticResource SemiIconAlertCircle}"/>
                     <TextBlock Name="TextBlockTitle" Grid.Row="0" Grid.Column="1" Foreground="#FA676E" Text="Text"/>
                     <SelectableTextBlock Name="TextBlockText" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" TextWrapping="Wrap" Text="Text"/>
                 </Grid>

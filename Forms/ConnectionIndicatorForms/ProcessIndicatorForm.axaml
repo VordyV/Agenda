@@ -10,7 +10,7 @@
             <u:LoadingIcon Grid.Row="0" Classes="Large" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             <TextBlock Grid.Row="1" Name="TextBlockStatus" Text="Status" Classes="H6" Theme="{StaticResource TitleTextBlock}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             <TextBlock Grid.Row="2" Name="TextBlockText" Text="Establishing a secure connection" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-            <Button Grid.Row="3" Name="ButtonCancel" Content="Cancel" Theme="{StaticResource OutlineButton}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <Button Grid.Row="3" Name="ButtonCancel" Click="ButtonCancel_OnClick" Content="Cancel" Theme="{StaticResource OutlineButton}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
         </Grid>
     </Border>
 </UserControl>

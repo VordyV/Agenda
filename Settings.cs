@@ -15,7 +15,7 @@ public static class Settings
             id: "simple",
             title: "Simple",
             version: "0.1",
-            view: () => new SimpleModule.View(),
+            view: (driver) => new SimpleModule.View(driver: driver),
             fields: 
             [
                 new ModuleField(id: "address", title: "Address", control: () => new IPv4FieldControl(), required: true, validator: (data) => new ModuleFieldValidator(length: 15).Validate(data)),
@@ -27,7 +27,7 @@ public static class Settings
             id: "rconbf2142default",
             title: "Rcon BF2142 Default",
             version: "0.1",
-            view: () => new RconBF2142DefaultModule.View(),
+            view: (driver) => new RconBF2142DefaultModule.View(),
             fields: 
             [
                 new ModuleField(id: "address", title: "Address", control: () => new IPv4FieldControl(), required: true, validator: (data) => new ModuleFieldValidator(length: 15).Validate(data)),

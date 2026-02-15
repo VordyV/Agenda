@@ -11,7 +11,11 @@
             <MenuItem Header="_Profile">
                 <MenuItem Name="MenuItemNew" Header="New" IsEnabled="False"/>
                 <MenuItem Name="MenuItemOpen" Header="Open" Click="MenuItemOpen_OnClick"/>
+            </MenuItem>
+            <MenuItem Header="_Session">
                 <MenuItem Name="MenuItemConnect" Header="Connect" Click="MenuItemConnect_OnClick"/>
+                <MenuItem Name="MenuItemGoToActive" Header="Go to Active" Click="MenuItemGoToActive_OnClick" IsEnabled="False"/>
+                <MenuItem Name="MenuItemCloseActive" Header="Close active" Click="MenuItemCloseActive_OnClick" IsEnabled="False"/>
             </MenuItem>
         </Menu>
         <ContentControl Grid.Row="1" Name="MainContent"/>

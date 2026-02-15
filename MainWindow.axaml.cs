@@ -40,7 +40,8 @@ public partial class MainWindow : Window
         
         this.MainContent.Content = this._viewPresenter.Content;
         
-        this._manager.OnInit += this.OnCreateInit;
+        this._manager.OnInit += this.OnInit;
+        this._manager.OnStop += this.OnStop;
     }
 
     private void _onLoadView(Manager manager, ViewPresenter presenter, object? arg)
@@ -56,21 +57,23 @@ public partial class MainWindow : Window
         OverlayDialog.ShowCustom(new ConnectForm(this._manager, this._viewPresenter) {DataContext = context}, context, hostId: "main", new OverlayDialogOptions() {CanDragMove = false, CanResize = false});
     }
     
-    public async void OnCreateInit(string connId, InitContext ctx)
+    public async void OnInit(string connId, InitContext ctx)
     {
         var conn = this._manager.GetConnection(connId);
         var ctxPcsForm = new DialogContext();
-        var form = new ProcessIndicatorForm() {DataContext = ctxPcsForm};
+        var form = new ProcessIndicatorForm((o, args) => conn.Cancel()) {DataContext = ctxPcsForm};
 
         ctx.OnAction += async (s, t, c) =>
         {
             form.SetStatus(s);
             form.SetText(t);
-            if (c != null) ctxPcsForm.Close();
-            if (c == true)
+            if (c != null || c == InitCtxAction.Cancelled) ctxPcsForm.Close();
+            if (c == InitCtxAction.Connected)
             {
                 this._viewPresenter.LoadView("server", connId);
-            } else if (c == false)
+                this.MenuItemGoToActive.IsEnabled = true;
+                this.MenuItemCloseActive.IsEnabled = true;
+            } else if (c == InitCtxAction.Error)
             {
                 var ctxErrForm = new DialogContext();
                 OverlayDialog.ShowCustom(new ErrorIndicatorForm(s, t, async (o, args) => ctxErrForm.Close()) {DataContext = ctxErrForm}, ctxErrForm, hostId: "main");
@@ -78,5 +81,26 @@ public partial class MainWindow : Window
         };
         
         await OverlayDialog.ShowCustomModal<bool>(form, ctxPcsForm, hostId: "main", new OverlayDialogOptions() {IsCloseButtonVisible = false});
+    }
+
+    public void OnStop(string connId)
+    {
+        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+        {
+            this.MenuItemGoToActive.IsEnabled = false;
+            this.MenuItemCloseActive.IsEnabled = false;
+        });
+        
+    }
+
+    private void MenuItemGoToActive_OnClick(object? sender, RoutedEventArgs e) => this._viewPresenter.ShowView("server");
+
+    private void MenuItemCloseActive_OnClick(object? sender, RoutedEventArgs e)
+    {
+        // Since only one session can be open at a time for now, there will be only one element among the active ones
+        var conns = this._manager.GetActiveConnections();
+        if (conns.Count < 1) return;
+        var conn = conns[0];
+        conn.Cancel();
     }
 }
