@@ -39,7 +39,8 @@ public partial class MainWindow : Window
         InitializeComponent();
         
         this.MainContent.Content = this._viewPresenter.Content;
-        
+
+        this._manager.OnCreate += this.OnCreate;
         this._manager.OnInit += this.OnInit;
         this._manager.OnStop += this.OnStop;
     }
@@ -56,12 +57,21 @@ public partial class MainWindow : Window
         var context = new DialogContext();
         OverlayDialog.ShowCustom(new ConnectForm(this._manager, this._viewPresenter) {DataContext = context}, context, hostId: "main", new OverlayDialogOptions() {CanDragMove = false, CanResize = false});
     }
+
+    public async void OnCreate(string connId)
+    {
+        foreach (var conn in this._manager.GetConnections())
+        {
+            if (conn.Id == connId) continue;
+            this._manager.RemoveConnection(conn.Id);
+        }
+    }
     
     public async void OnInit(string connId, InitContext ctx)
     {
         var conn = this._manager.GetConnection(connId);
         var ctxPcsForm = new DialogContext();
-        var form = new ProcessIndicatorForm((o, args) => conn.Cancel()) {DataContext = ctxPcsForm};
+        var form = new ProcessIndicatorForm((o, args) => conn.Driver?.Cancel()) {DataContext = ctxPcsForm};
 
         ctx.OnAction += async (s, t, c) =>
         {
@@ -70,7 +80,7 @@ public partial class MainWindow : Window
             if (c != null || c == InitCtxAction.Cancelled) ctxPcsForm.Close();
             if (c == InitCtxAction.Connected)
             {
-                this._viewPresenter.LoadView("server", connId);
+                this._viewPresenter.LoadView("server", connId, reload: true);
                 this.MenuItemGoToActive.IsEnabled = true;
                 this.MenuItemCloseActive.IsEnabled = true;
             } else if (c == InitCtxAction.Error)
@@ -101,6 +111,6 @@ public partial class MainWindow : Window
         var conns = this._manager.GetActiveConnections();
         if (conns.Count < 1) return;
         var conn = conns[0];
-        conn.Cancel();
+        conn.Driver?.Cancel();
     }
 }

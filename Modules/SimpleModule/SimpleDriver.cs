@@ -5,14 +5,14 @@ using Agenda.Core;
 
 namespace Agenda.Modules.SimpleModule;
 
-public class Driver : BasicDriver
+public class SimpleDriver : BasicDriver
 {
-
-    public Driver(string id, string moduleId, Dictionary<string, object?> fields) : base(id, moduleId, fields)
+    public bool Test()
     {
+        return true;
     }
 
-    public override async Task OnStart(InitContext ctx)
+    public override async Task OnStart(InitContext ctx, Dictionary<string, object?> fields)
     {
         Console.WriteLine("1");
         ctx.Action("1", "11");

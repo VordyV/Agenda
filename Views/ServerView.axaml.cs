@@ -6,6 +6,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace Agenda.Views;
 
@@ -14,8 +15,7 @@ public partial class ServerView : UserControl
     private Manager _manager;
     private ViewPresenter _presenter;
     private string _connId;
-    private BasicDriver _conn;
-    private Control _view;
+    private Connection _conn;
     
     public ServerView()
     {
@@ -31,9 +31,7 @@ public partial class ServerView : UserControl
         this._connId = (string)connId;
             
         this._conn = this._manager.GetConnection(this._connId);
-        var module = this._manager.GetModule(this._conn.ModuleId);
-        this._view = module.View.Invoke(this._conn);
 
-        this.MainContent.Content = this._view;
+        this.MainContent.Content = this._conn.View;
     }
 }
