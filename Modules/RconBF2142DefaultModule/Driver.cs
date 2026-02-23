@@ -8,14 +8,9 @@ namespace Agenda.Modules.RconBF2142DefaultModule;
 public class Driver : BasicDriver
 {
 
-    public Driver()
+    public Driver(string connId) : base(connId)
     {
-        Console.WriteLine("CREATE");
-    }
-
-    ~Driver()
-    {
-        Console.WriteLine("DELETE");
+        
     }
 
     public override async Task OnStart(InitContext ctx, Dictionary<string, object?> fields)

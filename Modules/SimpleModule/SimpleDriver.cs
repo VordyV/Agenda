@@ -12,6 +12,11 @@ public class SimpleDriver : BasicDriver
         return true;
     }
 
+    public SimpleDriver(string connId) : base(connId)
+    {
+        
+    }
+
     public override async Task OnStart(InitContext ctx, Dictionary<string, object?> fields)
     {
         Console.WriteLine("1");

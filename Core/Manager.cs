@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -27,7 +28,8 @@ public class Manager
     public event Action<string> OnCreate;
     public event Action<string, InitContext> OnInit;
     public event Action<string, DriverState?, bool?> OnChangeStatus;
-    public event Action<string> OnStop; 
+    public event Action<string> OnStop;
+    public event Action<string> OnExit;
 
     public void RegisterModule(Module module)
     {
@@ -77,9 +79,8 @@ public class Manager
         
         var conn = new Connection(id: connId, moduleId: moduleId, fields: fields);
         this._connections.Add(connId, conn);
-        var vm = module.ViewModel.Invoke(conn);
-        var view = module.View.Invoke(vm);
-        conn.SetView(view, vm);
+        var view = module.View.Invoke(conn);
+        conn.SetView(view);
         //this._connections.Add(connId, module.Driver.Invoke(connId, moduleId, fields));
         this.OnCreate?.Invoke(connId);
         
@@ -101,7 +102,9 @@ public class Manager
         this.OnInit?.Invoke(conn.Id, ctx);
         try
         {
-            conn.SetDriver(module.Driver.Invoke());
+            conn.SetDriver(module.Driver.Invoke(connId));
+            //conn.ViewModel.Init();
+            conn.Start();
             this.SetState(conn, new DriverState() {Type = TypeDriverState.Starting});
             await conn.Driver.OnStart(ctx, conn.Fields);
             this.SetState(conn, new DriverState() {Type = TypeDriverState.Running}, connected: true);
@@ -111,7 +114,7 @@ public class Manager
         }
         catch (OperationCanceledException e)
         {
-            this.SetState(conn, new DriverState() {Type = TypeDriverState.Error, ErrorDetail = e.Message});
+            this.SetState(conn, new DriverState() {Type = TypeDriverState.Cancelled, ErrorDetail = e.Message});
             ctx.Action("", e.Message, InitCtxAction.Cancelled);
         }
         catch (InitException e)
@@ -125,6 +128,10 @@ public class Manager
             ctx.Action("Error 0_o", e.Message, InitCtxAction.Error);
             //throw;
         }
+        
+        //conn.ViewModel.Detach();
+        conn.Stop();
+        conn.DisposeDriver();
         this.OnStop?.Invoke(conn.Id);
         //this._connections.Remove(connId);
         return false;
@@ -151,17 +158,29 @@ public class Manager
             await conn.Driver?.OnLoop();
             this.SetState(conn, new DriverState() { Type = TypeDriverState.Stopped }, connected: false);
         }
+        catch (OperationCanceledException e)
+        {
+            this.SetState(conn, new DriverState() {Type = TypeDriverState.Cancelled, ErrorDetail = e.Message});
+        }
         catch (Exception e)
         {
             this.SetState(conn, new DriverState() { Type = TypeDriverState.Error, ErrorDetail = e.Message });
         }
-        finally
+        
+        try
         {
-            await conn.Driver?.OnStop();
-            this.SetState(conn, connected: false);
-            this.OnStop?.Invoke(conn.Id);
+            await conn.Driver.OnStop();
         }
+        catch (Exception e)
+        {
+            Debug.WriteLine($"ERR {e.Message}");
+        }
+        
+        //conn.ViewModel.Detach();
+        this.SetState(conn, connected: false);
+        conn.Stop();
         conn.DisposeDriver();
+        this.OnStop?.Invoke(conn.Id);
         //this._connections.Remove(driver.Id);
     }
 }

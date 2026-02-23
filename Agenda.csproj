@@ -24,4 +24,8 @@
         <PackageReference Include="Semi.Avalonia" Version="11.3.7.2" />
         <PackageReference Include="Tabalonia" Version="0.10.7" />
     </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Modules\TCPCModule\Forms\" />
+    </ItemGroup>
 </Project>

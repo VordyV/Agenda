@@ -11,7 +11,9 @@
                 <Grid RowDefinitions="Auto, *" ColumnDefinitions="Auto, *" ColumnSpacing="12" RowSpacing="12">
                     <PathIcon Name="PathIconError" Grid.Row="0" Grid.Column="0" Foreground="#FA676E" Data="{StaticResource SemiIconAlertCircle}"/>
                     <TextBlock Name="TextBlockTitle" Grid.Row="0" Grid.Column="1" Foreground="#FA676E" Text="Text"/>
-                    <SelectableTextBlock Name="TextBlockText" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" TextWrapping="Wrap" Text="Text"/>
+                    <ScrollViewer Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
+                        <SelectableTextBlock Name="TextBlockText"  TextWrapping="Wrap" Text="Text"/>
+                    </ScrollViewer>
                 </Grid>
             </Border>
             <Button Name="ButtonOk" Click="ButtonOk_OnClick" Grid.Row="1" Content="OK" Classes="Danger" Theme="{StaticResource OutlineButton}" HorizontalAlignment="Center" VerticalAlignment="Center"/>

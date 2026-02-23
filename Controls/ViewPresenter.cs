@@ -9,6 +9,7 @@ public class ViewPresenter
 {
     private Manager _manager;
     private Dictionary<string, Func<Manager, ViewPresenter, object?, UserControl>> _views;
+    private string? _defaultView;
     private string _view;
     private Dictionary<string, UserControl> _viewInstances;
     public UserControl Content;
@@ -18,10 +19,11 @@ public class ViewPresenter
     {
         this._manager = manager;
         this._viewInstances = new();
+        this._defaultView = defaultView;
         if (views != null)
         {
             this._views = views;
-            if (defaultView != null) this.LoadView(defaultView);
+            if (this._defaultView != null) this.LoadView(this._defaultView);
         }
         else this._views = new();
     }
@@ -57,5 +59,11 @@ public class ViewPresenter
         
         this.Content = this._viewInstances[name];
         this.OnLoadView?.Invoke(this._manager, this, arg);
+    }
+
+    public void CloseView(string name)
+    {
+        if (this._viewInstances.ContainsKey(name)) this._viewInstances.Remove(name);
+        if (this._view == name && this._defaultView != null) this.LoadView(this._defaultView);
     }
 }

@@ -10,18 +10,16 @@ public class Module
     public string Id { get; private set; }
     public string Title { get; private set; }
     public string Version { get; private set; }
-    public Func<ObservableObject, UserControl> View { get; private set; }
-    public Func<Connection, BasicViewModel> ViewModel { get; private set; }
+    public Func<Connection, BasicView> View { get; private set; }
     public Dictionary<string, ModuleField> Fields;
-    public Func<BasicDriver> Driver { get; private set; }
+    public Func<string, BasicDriver> Driver { get; private set; }
 
-    public Module(string id, string title, string version, Func<ObservableObject, UserControl> view, Func<Connection, BasicViewModel> viewModel, List<ModuleField> fields, Func<BasicDriver> driver)
+    public Module(string id, string title, string version, Func<Connection, BasicView> view, List<ModuleField> fields, Func<string, BasicDriver> driver)
     {
         this.Id = id;
         this.Title = title;
         this.Version = version;
         this.View = view;
-        this.ViewModel = viewModel;
         this.Fields = this._getDictModuleFields(fields);
         this.Driver = driver;
     }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -7,6 +8,19 @@ namespace Agenda.Core;
 
 public abstract class BasicDriver
 {
+    public string ConnectionId { get; private set; }
+
+    public BasicDriver(string connId)
+    {
+        this.ConnectionId = connId;
+        Debug.WriteLine($"[{this.ConnectionId}] Driver created");
+    }
+
+    ~BasicDriver()
+    {
+        Debug.WriteLine($"[{this.ConnectionId}] Driver deleted");
+    }
+    
     public DriverState State { get; private set; } = new DriverState()
     {
         Type = TypeDriverState.Created

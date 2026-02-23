@@ -7,5 +7,6 @@ public enum TypeDriverState
     Running,
     Stopped,
     Stoping,
-    Error
+    Error,
+    Cancelled
 }

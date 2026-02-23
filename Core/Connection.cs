@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Avalonia.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 
@@ -10,21 +11,26 @@ public class Connection
     public string Id { get; private set; }
     public string ModuleId { get; private set; }
     public UserControl View { get; private set; }
-    public BasicViewModel ViewModel { get; private set; }
     public BasicDriver? Driver { get; private set; }
     public Dictionary<string, object?> Fields { get; private set; }
+    public event Action OnStart; 
+    public event Action OnStop; 
 
     public Connection(string id, string moduleId, Dictionary<string, object?> fields)
     {
         this.Id = id;
         this.ModuleId = moduleId;
         this.Fields = fields;
+        Debug.WriteLine($"[{this.Id}] Connection created");
+    }
+    
+    ~Connection() {
+        Debug.WriteLine($"[{this.Id}] Connection deleted");
     }
 
-    public void SetView(UserControl view, BasicViewModel viewModel)
+    public void SetView(UserControl view)
     {
         this.View = view;
-        this.ViewModel = viewModel;
     }
 
     public void SetDriver(BasicDriver driver)
@@ -39,4 +45,7 @@ public class Connection
         this.Driver.Dispose();
         this.Driver = null;
     }
+
+    public void Start() => this.OnStart?.Invoke();
+    public void Stop() => this.OnStop?.Invoke();
 }

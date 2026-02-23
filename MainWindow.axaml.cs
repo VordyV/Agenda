@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Agenda.Controls;
 using Agenda.Core;
@@ -7,8 +8,11 @@ using Agenda.Forms;
 using Agenda.Forms.ConnectionIndicatorForms;
 using Agenda.Views;
 using Avalonia.Controls;
+using Avalonia.Controls.Notifications;
 using Avalonia.Interactivity;
 using Ursa.Controls;
+using WindowNotificationManager = Ursa.Controls.WindowNotificationManager;
+using Notification = Ursa.Controls.Notification;
 
 namespace Agenda;
 
@@ -16,6 +20,7 @@ public partial class MainWindow : Window
 {
     private Manager _manager;
     private ViewPresenter _viewPresenter;
+    private WindowNotificationManager _notificationManager;
 
     public MainWindow()
     {
@@ -33,6 +38,8 @@ public partial class MainWindow : Window
             },
             defaultView: "home"
         );
+        this._notificationManager = new WindowNotificationManager(this);
+        this._notificationManager.Position = NotificationPosition.TopRight;
         
         this._viewPresenter.OnLoadView += this._onLoadView;
         
@@ -43,6 +50,21 @@ public partial class MainWindow : Window
         this._manager.OnCreate += this.OnCreate;
         this._manager.OnInit += this.OnInit;
         this._manager.OnStop += this.OnStop;
+        this._manager.OnChangeStatus += this.OnChangeStatus;
+    }
+
+    private async void OnChangeStatus(string connId, DriverState? state, bool? connected)
+    {
+        Debug.WriteLine($"[{connId}] state={state?.Type.ToString()} connected={connected?.ToString()}");
+        if (state is not null && state.Type == TypeDriverState.Error)
+        {
+            Debug.WriteLine($"[{connId}] {state.ErrorDetail}");
+            /*this._notificationManager.Show(
+                new Notification("Something went wrong", state.ErrorDetail),
+                showIcon: true,
+                showClose: true,
+                type: NotificationType.Error);*/
+        }
     }
 
     private void _onLoadView(Manager manager, ViewPresenter presenter, object? arg)
@@ -50,7 +72,11 @@ public partial class MainWindow : Window
         this.MainContent.Content = presenter.Content;
     }
 
-    private void MenuItemOpen_OnClick(object? sender, RoutedEventArgs e) => this._viewPresenter.LoadView("home");
+    private void MenuItemOpen_OnClick(object? sender, RoutedEventArgs e)
+    {
+        this._viewPresenter.LoadView("home");
+        this._viewPresenter.CloseView("server");
+    } 
 
     private void MenuItemConnect_OnClick(object? sender, RoutedEventArgs e)
     {
@@ -95,6 +121,7 @@ public partial class MainWindow : Window
 
     public void OnStop(string connId)
     {
+        this._manager.RemoveConnection(connId);
         Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
             this.MenuItemGoToActive.IsEnabled = false;

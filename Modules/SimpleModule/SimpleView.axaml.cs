@@ -7,8 +7,13 @@ using Avalonia.Markup.Xaml;
 
 namespace Agenda.Modules.SimpleModule;
 
-public partial class SimpleView : UserControl
+public partial class SimpleView : BasicView
 {
+    public SimpleView(Connection c) : base(c)
+    {
+        InitializeComponent();
+    }
+
     public SimpleView()
     {
         InitializeComponent();
@@ -16,10 +21,9 @@ public partial class SimpleView : UserControl
 
     private void Button_OnClick(object? sender, RoutedEventArgs e)
     {
-        if (DataContext is SimpleViewModel vm)
+        if (this.Conn.Driver is not null)
         {
-            vm.Test();
+            Console.WriteLine(1);
         }
-        //Console.WriteLine(this._driver.Test());
     }
 }
