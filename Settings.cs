@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Reflection;
 using Agenda.Core;
 using Agenda.Core.ModelFieldControls;
 using Agenda.Modules.TCPCModule;
 using Avalonia.Controls;
+using Module = Agenda.Core.Module;
 using SimpleModule = Agenda.Modules.SimpleModule;
 using RconBF2142DefaultModule = Agenda.Modules.RconBF2142DefaultModule;
 
@@ -50,4 +52,21 @@ public static class Settings
             driver: (connId) => new SimpleModule.SimpleDriver(connId)
         )
     };
+    
+    public static string GithubUrl = "https://github.com/VordyV/Agenda";
+    public static string BugReportUrl = "https://github.com/VordyV/Agenda/issues/new";
+
+    public static string TextAbout = $"""
+                                     ## Agenda v{Assembly.GetExecutingAssembly().GetName().Version}
+
+                                     **Developed by a human:** Vladislav Netievsky aka VordyV
+                                     **Github:** {Settings.GithubUrl}
+                                     
+                                     To report errors and suggest improvements, please use the project's issue tracker on GitHub.
+                                     
+                                     #### Licensing
+                                     Used third-party libraries are distributed in accordance with their licenses.
+                                     
+                                     Powered by Vorklab.space
+                                     """;
 }

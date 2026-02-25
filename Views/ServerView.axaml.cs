@@ -29,9 +29,28 @@ public partial class ServerView : UserControl
         if (!(connId is string)) throw new Exception("");
         InitializeComponent();
         this._connId = (string)connId;
-            
         this._conn = this._manager.GetConnection(this._connId);
-
+        
         this.MainContent.Content = this._conn.View;
+
+        this._manager.OnChangeStatus += this.OnChangeStatus;
+        this.SetStatus(this._conn.Driver.State);
+    }
+
+    private void OnChangeStatus(string connId, DriverState? state, bool? connected)
+    {
+        if (connId != this._connId) return;
+        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+        {
+            if (state is not null) this.SetStatus(state);
+        });
+    }
+
+    private void SetStatus(DriverState state)
+    {
+        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+        {
+            this.LabelStatus.Content = state.Type;
+        });
     }
 }

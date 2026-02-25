@@ -3,8 +3,14 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="700" d:DesignHeight="450"
+             xmlns:u="https://irihi.tech/ursa"
              x:Class="Agenda.Views.ServerView">
-    <Grid>
-        <ContentControl Name="MainContent"/>
-    </Grid>
+    <Border Padding="7 0">
+        <Grid RowDefinitions="*, 25">
+            <ContentControl Grid.Row="0" Name="MainContent"/>
+            <u:Descriptions Grid.Row="1">
+                <u:DescriptionsItem Name="LabelStatus" Label="Status" Content="¯\_(ツ)_/¯"/>
+            </u:Descriptions>
+        </Grid> 
+    </Border>
 </UserControl>

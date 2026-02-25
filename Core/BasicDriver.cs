@@ -25,7 +25,7 @@ public abstract class BasicDriver
     {
         Type = TypeDriverState.Created
     };
-    public event Action<DriverState>? StateChanged;
+    public event Action<DriverState>? OnStateChanged;
     public bool Connected { get; private set; } = false;
 
     private CancellationTokenSource _cancelTokenSource = new CancellationTokenSource();
@@ -43,7 +43,7 @@ public abstract class BasicDriver
         if (state != null)
         {
             this.State = state;
-            StateChanged?.Invoke(state);
+            this.OnStateChanged?.Invoke(state);
         }
     }
 

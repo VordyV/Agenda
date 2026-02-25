@@ -140,4 +140,20 @@ public partial class MainWindow : Window
         var conn = conns[0];
         conn.Driver?.Cancel();
     }
+
+    private void MenuItemAbout_OnClick(object? sender, RoutedEventArgs e)
+    {
+        var context = new DialogContext();
+        OverlayDialog.ShowCustom(new AboutForm() {DataContext = context}, context, hostId: "main", new OverlayDialogOptions() {CanDragMove = true, CanResize = false});
+    }
+
+    private void MenuItemWebsite_OnClick(object? sender, RoutedEventArgs e)
+    {
+        TopLevel.GetTopLevel(this)?.Launcher.LaunchUriAsync(new Uri(Settings.GithubUrl));
+    }
+
+    private void MenuItemReportBug_OnClick(object? sender, RoutedEventArgs e)
+    {
+        TopLevel.GetTopLevel(this)?.Launcher.LaunchUriAsync(new Uri(Settings.BugReportUrl));
+    }
 }
