@@ -61,7 +61,7 @@ public class TCPCDriver : BasicDriver
 
     public override async Task OnLoop()
     {
-        byte[] responseBytes = new byte[512];
+        byte[] responseBytes = new byte[1024];
         int bytes;
 
         while (this._socket.Connected)

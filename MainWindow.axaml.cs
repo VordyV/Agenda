@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using Agenda.Controls;
 using Agenda.Core;
 using Agenda.Forms;
@@ -44,6 +45,8 @@ public partial class MainWindow : Window
         this._viewPresenter.OnLoadView += this._onLoadView;
         
         InitializeComponent();
+
+        this.Title = $"Agenda";
         
         this.MainContent.Content = this._viewPresenter.Content;
 
@@ -81,7 +84,7 @@ public partial class MainWindow : Window
     private void MenuItemConnect_OnClick(object? sender, RoutedEventArgs e)
     {
         var context = new DialogContext();
-        OverlayDialog.ShowCustom(new ConnectForm(this._manager, this._viewPresenter) {DataContext = context}, context, hostId: "main", new OverlayDialogOptions() {CanDragMove = false, CanResize = false});
+        OverlayDialog.ShowCustom(new ConnectForm(this._manager) {DataContext = context}, context, hostId: "main", new OverlayDialogOptions() {CanDragMove = false, CanResize = false});
     }
 
     public async void OnCreate(string connId)

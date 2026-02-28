@@ -9,7 +9,13 @@
         <!-- HEADER -->
         <Grid ColumnDefinitions="Auto, *, Auto" Margin="12 10">
             <TextBlock Grid.Column="0" Classes="H5" Theme="{StaticResource TitleTextBlock}">Profile list</TextBlock>
-            <Button Grid.Column="2" Name="AddNewProfile" Click="AddNewProfile_OnClick" Content="Add new profile" Theme="{StaticResource SolidButton}" />
+            <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="5">
+                <Button Name="ButtonNewSession" Click="ButtonNewSession_OnClick" Content="New session" Theme="{StaticResource OutlineButton}">
+                    <ToolTip.Tip>Creates a new session based on the user data entered in the form</ToolTip.Tip>
+                </Button>
+                <Button Name="AddNewProfile" Click="AddNewProfile_OnClick" Content="Add new profile" Theme="{StaticResource SolidButton}" IsEnabled="False"/>
+            </StackPanel>
+            
         </Grid>
         
         <!-- BODY -->

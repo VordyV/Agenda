@@ -40,9 +40,12 @@ public partial class TcpcView : BasicView
     {
         if (this.Conn.Driver is null || this.TextBoxInput.Text is null) return;
         var text = this.TextBoxInput.Text.Trim();
-        this.TextBoxOutput.Items.Add(new ItemControl(DateTime.Now.ToString("HH:m:s"), "Red", "request", text));
+        var item = new ItemControl(DateTime.Now.ToString("HH:m:s"), "Red", "request", text);
+        var data = Encoding.UTF8.GetBytes(text);
+        ToolTip.SetTip(item, $"Len: {data.Length}");
+        this.TextBoxOutput.Items.Add(item);
         this.TextBoxInput.Text = null;
-        if (this.Conn.Driver is TCPCDriver driver) await driver.SendData(Encoding.UTF8.GetBytes(text));
+        if (this.Conn.Driver is TCPCDriver driver) await driver.SendData(data);
     }
     
     private void OnResponse(Response response)
@@ -51,7 +54,8 @@ public partial class TcpcView : BasicView
         Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
             var item = new ItemControl(DateTime.Now.ToString("HH:m:s"), "Green", "response", result);
-            ToolTip.SetTip(item, $"Delay: {response.Delay.ToString()}ms");
+            var delay = response.Delay < 10000 ? $"{response.Delay.ToString()}ms" : ">10s";
+            ToolTip.SetTip(item, $"Delay: {delay}, Len: {response.Bytes}");
             this.TextBoxOutput.Items.Add(item);
             
             if (this.TextBoxOutput.Items.Count > 255) this.TextBoxOutput.Items.RemoveAt(0);

@@ -18,6 +18,7 @@ public static class Settings
             id: "simple",
             title: "Simple",
             version: "0.1",
+            description: "Simple test module",
             view: (conn) => new SimpleModule.SimpleView(conn),
             fields: 
             [
@@ -30,6 +31,7 @@ public static class Settings
             id: "tcpc",
             title: "TCP Client",
             version: "0.1",
+            description: "A simple client that receives and sends data via the TCP protocol",
             view: (conn) => new TcpcView(conn),
             fields: 
             [
@@ -42,6 +44,7 @@ public static class Settings
             id: "rconbf2142default",
             title: "Rcon BF2142 Default",
             version: "0.1",
+            description: "A client for remote control of a Battlefield 2142 game server via the RCON protocol, protocol module - Default",
             view: (conn) => new RconBF2142DefaultModule.View(),
             fields: 
             [

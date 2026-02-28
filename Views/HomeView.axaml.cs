@@ -29,4 +29,10 @@ public partial class HomeView : UserControl
     {
 
     }
+
+    private void ButtonNewSession_OnClick(object? sender, RoutedEventArgs e)
+    {
+        var context = new DialogContext();
+        OverlayDialog.ShowCustom(new ConnectForm(this._manager) {DataContext = context}, context, hostId: "main", new OverlayDialogOptions() {CanDragMove = false, CanResize = false});
+    }
 }

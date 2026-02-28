@@ -20,14 +20,14 @@ namespace Agenda.Forms;
 public partial class ConnectForm : UserControl
 {
     private Manager _manager;
-    private ViewPresenter _presenter;
+    //private ViewPresenter _presenter;
     private Module _currentModule;
     private Dictionary<string, Control> _fields = new();
     
-    public ConnectForm(Manager manager, ViewPresenter presenter)
+    public ConnectForm(Manager manager)
     {
         this._manager = manager;
-        this._presenter = presenter;
+        //this._presenter = presenter;
         InitializeComponent();
         this.LoadModules();
     }
@@ -54,6 +54,8 @@ public partial class ConnectForm : UserControl
     {
         var item = (ComboBoxItem)this.ComboBoxType.SelectedItem;
         this._currentModule = this._manager.GetModule(item.Name);
+
+        this.TextBlockDescription.Text = this._currentModule.Description;
         
         this.FormDynamic.Items.Clear();
         this._fields.Clear();
