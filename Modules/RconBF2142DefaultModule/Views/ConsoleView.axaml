@@ -1,0 +1,15 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="700" d:DesignHeight="450"
+             xmlns:u="https://irihi.tech/ursa"
+             x:Class="Agenda.Modules.RconBF2142DefaultModule.Views.ConsoleView">
+    <Grid RowDefinitions="*, Auto" ColumnDefinitions="Auto, *">
+        <Border Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Theme="{DynamicResource CardBorder}" Padding="0">
+            <TextBox Name="TextBoxOutput" IsReadOnly="True" VerticalAlignment="Stretch" VerticalContentAlignment="Top" Theme="{StaticResource LooklessTextBox}"/>
+        </Border>
+        <Button Grid.Row="1" Grid.Column="0" Name="ButtonRcn" Click="TextBlockRcn_OnClick" Content="?" Theme="{StaticResource BorderlessButton}" VerticalAlignment="Center"/>
+        <AutoCompleteBox Grid.Row="1" Grid.Column="1" Name="TextBoxInput" KeyDown="TextBoxInput_OnKeyDown" Watermark="Here is command..." VerticalAlignment="Center"/>
+    </Grid>
+</UserControl>

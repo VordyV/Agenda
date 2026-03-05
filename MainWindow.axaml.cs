@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using Agenda.Controls;
 using Agenda.Core;
 using Agenda.Forms;
@@ -56,23 +57,23 @@ public partial class MainWindow : Window
         this._manager.OnChangeStatus += this.OnChangeStatus;
     }
 
-    private async void OnChangeStatus(string connId, DriverState? state, bool? connected)
+    private void OnChangeStatus(string connId, DriverState? state, bool? connected)
     {
         Debug.WriteLine($"[{connId}] state={state?.Type.ToString()} connected={connected?.ToString()}");
         if (state is not null && state.Type == TypeDriverState.Error)
         {
             Debug.WriteLine($"[{connId}] {state.ErrorDetail}");
-            /*this._notificationManager.Show(
-                new Notification("Something went wrong", state.ErrorDetail),
+            this._notificationManager.Show(
+                new Notification("Session ended unexpectedly", state.ErrorDetail),
                 showIcon: true,
                 showClose: true,
-                type: NotificationType.Error);*/
+                type: NotificationType.Error);
         }
     }
 
-    private void _onLoadView(Manager manager, ViewPresenter presenter, object? arg)
+    private void _onLoadView(string view)
     {
-        this.MainContent.Content = presenter.Content;
+        this.MainContent.Content = this._viewPresenter.Content;
     }
 
     private void MenuItemOpen_OnClick(object? sender, RoutedEventArgs e)

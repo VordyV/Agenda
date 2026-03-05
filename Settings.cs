@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Net;
 using System.Reflection;
 using Agenda.Core;
 using Agenda.Core.ModelFieldControls;
@@ -45,14 +47,14 @@ public static class Settings
             title: "Rcon BF2142 Default",
             version: "0.1",
             description: "A client for remote control of a Battlefield 2142 game server via the RCON protocol, protocol module - Default",
-            view: (conn) => new RconBF2142DefaultModule.View(),
+            view: (conn) => new RconBF2142DefaultModule.RconBf2142DefaultView(conn),
             fields: 
             [
-                new ModuleField(id: "address", title: "Address", control: () => new IPv4FieldControl(), required: true, validator: (data) => new ModuleFieldValidator(length: 15).Validate(data)),
-                new ModuleField(id: "rcon_port", title: "Rcon port", control: () => new IntFieldControl(min: 1.0m, max: 65535.0m), required: true, validator: (data) => new ModuleFieldValidator(maxNum: 65535, minNum: 1).Validate(data)),
-                new ModuleField(id: "rcon_password", title: "Rcon password", control: () => new PasswordFieldControl(), required: true, validator: (data) => new ModuleFieldValidator(length: 128).Validate(data))
+                new ModuleField(id: "address", title: "Address", control: () => new IPv4FieldControl(), required: true, validator: (data) => new ModuleFieldValidator(length: 15).Validate(data), value: IPAddress.Parse("127.0.0.1")),
+                new ModuleField(id: "rcon_port", title: "Rcon port", control: () => new IntFieldControl(min: 1.0m, max: 65535.0m), required: true, validator: (data) => new ModuleFieldValidator(maxNum: 65535, minNum: 1).Validate(data), value: 4711),
+                new ModuleField(id: "rcon_password", title: "Rcon password", control: () => new PasswordFieldControl(), required: true, validator: (data) => new ModuleFieldValidator(length: 128).Validate(data), value: "super123")
             ],
-            driver: (connId) => new SimpleModule.SimpleDriver(connId)
+            driver: (connId) => new RconBF2142DefaultModule.RconBf2142DefaultDriver(connId)
         )
     };
     

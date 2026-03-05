@@ -64,6 +64,7 @@ public partial class ConnectForm : UserControl
         {
             BaseModelFieldControl control = field.Value.Control.Invoke();
             control.Width = 400;
+            if (field.Value.Value is not null) control.SetValue(field.Value.Value);
             var formItem = new FormItem()
             { Content = control, Name = field.Key};
             FormItem.SetLabel(formItem, field.Value.Title);

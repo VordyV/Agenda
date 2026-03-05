@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -15,7 +16,7 @@ public enum InitCtxAction
 
 public class InitContext
 {
-    public event Action<string, string, InitCtxAction?> OnAction;
+    public event Action<string, string, InitCtxAction?>? OnAction;
     public void Action(string status, string text, InitCtxAction? action = null) => this.OnAction?.Invoke(status, text, action);
 }
 
@@ -23,13 +24,12 @@ public class Manager
 {
     private Dictionary<string, Module> _modules = new();
     //private Dictionary<string, BasicDriver> _connections = new();
-    private Dictionary<string, Connection> _connections = new();
-    
-    public event Action<string> OnCreate;
-    public event Action<string, InitContext> OnInit;
-    public event Action<string, DriverState?, bool?> OnChangeStatus;
-    public event Action<string> OnStop;
-    public event Action<string> OnExit;
+    private ConcurrentDictionary<string, Connection> _connections = new();
+
+    public event Action<string>? OnCreate;
+    public event Action<string, InitContext>? OnInit;
+    public event Action<string, DriverState?, bool?>? OnChangeStatus;
+    public event Action<string>? OnStop;
 
     public void RegisterModule(Module module)
     {
@@ -78,7 +78,8 @@ public class Manager
         string connId = uuid.ToString("N");
         
         var conn = new Connection(id: connId, moduleId: moduleId, fields: fields);
-        this._connections.Add(connId, conn);
+        this._connections.TryAdd(connId, conn);
+        //this._connections.Add(connId, conn);
         var view = module.View.Invoke(conn);
         conn.SetView(view);
         //this._connections.Add(connId, module.Driver.Invoke(connId, moduleId, fields));
@@ -106,10 +107,10 @@ public class Manager
             //conn.ViewModel.Init();
             conn.Start();
             this.SetState(conn, new DriverState() {Type = TypeDriverState.Starting});
-            await conn.Driver.OnStart(ctx, conn.Fields);
+            if (conn.Driver is not null) await conn.Driver.OnStart(ctx, conn.Fields);
             this.SetState(conn, new DriverState() {Type = TypeDriverState.Running}, connected: true);
             ctx.Action("", "", InitCtxAction.Connected);
-            Task task = Task.Run(() => this._startConnLoop(conn));
+            _ = this._startConnLoop(conn);
             return true;
         }
         catch (OperationCanceledException e)
@@ -138,7 +139,7 @@ public class Manager
         //Task task = Task.Run(() => this._startConnLoop(driver));
     }
 
-    public async Task CloseConnection(string connId)
+    public void CloseConnection(string connId)
     {
         Connection conn = GetConnection(connId);
         conn.Driver?.Cancel();
@@ -148,14 +149,14 @@ public class Manager
     {
         Connection conn = GetConnection(connId);
         if (conn.Driver != null) throw new Exception("Connection is not closed");
-        this._connections.Remove(connId);
+        this._connections.TryRemove(connId, out Connection? value);
     }
 
-    private async void _startConnLoop(Connection conn)
+    private async Task _startConnLoop(Connection conn)
     {
         try
         {
-            await conn.Driver?.OnLoop();
+            if (conn.Driver is not null) await conn.Driver.OnLoop();
             this.SetState(conn, new DriverState() { Type = TypeDriverState.Stopped }, connected: false);
         }
         catch (OperationCanceledException e)
@@ -169,7 +170,7 @@ public class Manager
         
         try
         {
-            await conn.Driver.OnStop();
+            if (conn.Driver is not null) await conn.Driver.OnStop();
         }
         catch (Exception e)
         {

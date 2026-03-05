@@ -31,6 +31,7 @@
         <PackageReference Include="Irihi.Ursa.Themes.Semi" Version="1.14.1" />
         <PackageReference Include="LiveMarkdown.Avalonia" Version="1.7.0" />
         <PackageReference Include="Semi.Avalonia" Version="11.3.7.2" />
+        <PackageReference Include="Semi.Avalonia.DataGrid" Version="11.3.7.3" />
         <PackageReference Include="Tabalonia" Version="0.10.7" />
     </ItemGroup>
 

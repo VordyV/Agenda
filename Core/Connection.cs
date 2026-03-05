@@ -14,7 +14,8 @@ public class Connection
     public BasicDriver? Driver { get; private set; }
     public Dictionary<string, object?> Fields { get; private set; }
     public event Action OnStart; 
-    public event Action OnStop; 
+    public event Action OnStop;
+    public bool IsStarted { get; private set; } = false;
 
     public Connection(string id, string moduleId, Dictionary<string, object?> fields)
     {
@@ -22,6 +23,8 @@ public class Connection
         this.ModuleId = moduleId;
         this.Fields = fields;
         Debug.WriteLine($"[{this.Id}] Connection created");
+        this.OnStart += () => this.IsStarted = true;
+        this.OnStop += () => this.IsStarted = false;
     }
     
     ~Connection() {

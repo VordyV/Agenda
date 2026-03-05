@@ -11,6 +11,7 @@
         <semi:SemiTheme Locale="zh-CN" />
         <u-semi:SemiTheme Locale="zh-CN"/>
         <StyleInclude Source="avares://LiveMarkdown.Avalonia/Styles.axaml"/>
+        <semi:DataGridSemiTheme />
     </Application.Styles>
              
      <Application.Resources>
