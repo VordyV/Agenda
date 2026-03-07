@@ -14,7 +14,7 @@ namespace Agenda.Modules.RconBF2142DefaultModule;
 public class RconBf2142DefaultDriver : BasicDriver
 {
     private Socket _socket;
-    private Queue<RconTask> _tasks = new();
+    private ConcurrentQueue<RconTask> _tasks = new();
     
     public Action<RconTask> OnRecv;
 
@@ -23,11 +23,11 @@ public class RconBf2142DefaultDriver : BasicDriver
         
     }
 
-    public async Task SendAsync(string taskName, string command)
+    public async Task SendAsync(string taskName, string command, Dictionary<string, string>? details = null)
     {
         byte[] data = Encoding.UTF8.GetBytes("\x02"+command+"\n");
+        this._tasks.Enqueue(new RconTask(name: taskName, command: command, details: details));
         if (this._socket.Connected) await this._socket.SendAsync(data);
-        this._tasks.Enqueue(new RconTask(name: taskName, command: command));
     }
 
     private async Task<string> AwaitData(string endCharacter)
@@ -105,17 +105,17 @@ public class RconBf2142DefaultDriver : BasicDriver
         byte[] responseBytes = new byte[1024];
         int bytes;
         string value;
-        
+        RconTask? rconTask;
         while (this._socket.Connected)
         {
             bytes = await this._socket.ReceiveAsync(responseBytes, this.Token);
             value = Encoding.UTF8.GetString(responseBytes, 0, bytes).Replace("\x04", "");
             if (value.Substring(value.Length-1) == "\n") value = value.Remove(value.Length-1);
-            var s = this._tasks.TryPeek(out var rt);
+            var s = this._tasks.TryDequeue(out rconTask);
             if (s)
             {
-                rt.SetResult(value);
-                this.OnRecv?.Invoke(rt);
+                rconTask!.SetResult(value);
+                this.OnRecv?.Invoke(rconTask);
             }
         }
     }

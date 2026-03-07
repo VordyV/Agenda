@@ -3,9 +3,23 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             xmlns:local="clr-namespace:Agenda.Modules.RconBF2142DefaultModule.Views"
+             x:DataType="local:PlayersView"
              x:Class="Agenda.Modules.RconBF2142DefaultModule.Views.PlayersView">
     <Grid RowDefinitions="*">
-        <DataGrid Name="DataGridPlayers">
+        <DataGrid Name="DataGridPlayers" ItemsSource="{Binding Players}" SelectionMode="Single">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Nickname" IsReadOnly="True" Binding="{Binding Nick}"/>
+                <DataGridTextColumn Header="PID" IsReadOnly="True" Binding="{Binding PID}"/>
+                <DataGridTextColumn Header="Address" IsReadOnly="True" Binding="{Binding Address}"/>
+                <DataGridTextColumn Header="Hash" IsReadOnly="True" Binding="{Binding Hash}"/>
+            </DataGrid.Columns>
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Kick" Click="MenuItemDGKick_OnClick"/>
+                    <MenuItem Header="Ban" Click="MenuItemDGBan_OnClick"/>
+                </ContextMenu>
+            </DataGrid.ContextMenu>
         </DataGrid>
     </Grid>
 </UserControl>

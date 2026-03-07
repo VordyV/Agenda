@@ -43,6 +43,8 @@ public partial class MainWindow : Window
         this._notificationManager = new WindowNotificationManager(this);
         this._notificationManager.Position = NotificationPosition.TopRight;
         
+        NotificationManager.Init(this._notificationManager);
+        
         this._viewPresenter.OnLoadView += this._onLoadView;
         
         InitializeComponent();

@@ -4,19 +4,14 @@ using Irihi.Avalonia.Shared.Contracts;
 
 namespace Agenda.Forms;
 
-public partial class DialogContext : ObservableObject, IDialogContext
+public partial class DialogContextModal <T> : ObservableObject, IDialogContext
 {  
     public void Close()  
     {  
         RequestClose?.Invoke(this, true);  
     }
     
-    public void Close(bool result)
-    {
-        RequestClose?.Invoke(this, result);
-    }
-    
-    public void Close(string result)
+    public void Close(T result)
     {
         RequestClose?.Invoke(this, result);
     }

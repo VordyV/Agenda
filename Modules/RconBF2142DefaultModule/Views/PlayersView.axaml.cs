@@ -1,14 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text.RegularExpressions;
 using Agenda.Controls;
 using Agenda.Core;
+using Agenda.Forms;
+using Agenda.Modules.RconBF2142DefaultModule.Forms;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
+using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using Avalonia.Threading;
+using Ursa.Controls;
 
 namespace Agenda.Modules.RconBF2142DefaultModule.Views;
 
@@ -26,6 +31,7 @@ public partial class PlayersView : UserControl
     private ViewPresenter _viewPresenter;
     private Connection _conn;
     private DispatcherTimer _timer;
+    public ObservableCollection<Player> Players { get; set; } = new();
     
     public PlayersView()
     {
@@ -37,9 +43,11 @@ public partial class PlayersView : UserControl
         this._viewPresenter = presenter;
         this._conn = conn;
         InitializeComponent();
+        DataContext = this;
+        
         this._timer = new DispatcherTimer()
         {
-            Interval = TimeSpan.FromSeconds(5)
+            Interval = TimeSpan.FromSeconds(3)
         }; 
         this._timer.Tick += OnTimerTick;
         
@@ -48,10 +56,13 @@ public partial class PlayersView : UserControl
         
         if (this._conn.IsStarted) this.OnStart();
         
-        this.DataGridPlayers.Columns.Add(new DataGridTextColumn() {FontWeight = FontWeight.Bold, Header = "Nick", Binding = new Binding("Nick"), IsReadOnly = true});
-        this.DataGridPlayers.Columns.Add(new DataGridTextColumn() {Header = "PID", Binding = new Binding("PID"), IsReadOnly = true});
-        this.DataGridPlayers.Columns.Add(new DataGridTextColumn() {Header = "Address", Binding = new Binding("Address"), IsReadOnly = true});
-        this.DataGridPlayers.Columns.Add(new DataGridTextColumn() {Header = "Hash", Binding = new Binding("Hash"), IsReadOnly = true});
+        this.Players.Add(new Player() {Nick = "2"});
+        this.Players.Add(new Player() {Nick = "3"});
+        
+        //this.DataGridPlayers.Columns.Add(new DataGridTextColumn() {FontWeight = FontWeight.Bold, Header = "Nick", Binding = new Binding("Nick"), IsReadOnly = true});
+        //this.DataGridPlayers.Columns.Add(new DataGridTextColumn() {Header = "PID", Binding = new Binding("PID"), IsReadOnly = true});
+        //this.DataGridPlayers.Columns.Add(new DataGridTextColumn() {Header = "Address", Binding = new Binding("Address"), IsReadOnly = true});
+        //this.DataGridPlayers.Columns.Add(new DataGridTextColumn() {Header = "Hash", Binding = new Binding("Hash"), IsReadOnly = true});
     }
     
     private async void OnStart()
@@ -79,17 +90,30 @@ public partial class PlayersView : UserControl
 
     private async void OnRecv(RconTask rt)
     {
+        Console.WriteLine(rt.Name);
         if (rt.Name == "players")
         {
             if (rt.Result is null) return;
-            Dispatcher.UIThread.Post(() =>
+            
+            this.Players.Clear();
+            foreach (var player in this._getPlayerDetails(rt.Result))
             {
-                this.DataGridPlayers.ItemsSource = GetPlayerDetails(rt.Result);
-            });
+                this.Players.Add(player);
+            }
+            
+            //Dispatcher.UIThread.Post(() =>
+            //{
+            //    
+            //});
+        }
+        else if (rt.Name == "players_kick")
+        {
+            if (rt.Result == "") NotificationManager.ShowInfo("Operation completed", $"Player {rt.Details["nick"]}({rt.Details["pid"]}) kicked");
+            else NotificationManager.ShowError("Operation failed", $"Player {rt.Details["nick"]}({rt.Details["pid"]}) not kicked: {rt.Result}");
         }
     }
     
-    public static List<Player> GetPlayerDetails(string rawData)
+    private List<Player> _getPlayerDetails(string rawData)
     {
         var players = new List<Player>();
         
@@ -121,5 +145,25 @@ public partial class PlayersView : UserControl
             }
         }
         return players;
+    }
+
+    private async void MenuItemDGKick_OnClick(object? sender, RoutedEventArgs e)
+    {
+        if (this.DataGridPlayers.SelectedItem is Player player)
+        {
+            var context = new DialogContext();
+            string? result = await OverlayDialog.ShowCustomModal<string>(new KickForm() {DataContext = context}, context, hostId: "main");
+            if (result is null) return;
+            
+            if (this._conn.Driver is RconBf2142DefaultDriver driver) await driver.SendAsync("players_kick", $"exec admin.kickPlayer {player.PID}", new() {{"nick", player.Nick}, {"pid", player.PID}});
+        }
+    }
+    
+    private async void MenuItemDGBan_OnClick(object? sender, RoutedEventArgs e)
+    {
+        if (this.DataGridPlayers.SelectedItem is Player player)
+        {
+            Console.WriteLine(player.Nick);
+        }
     }
 }

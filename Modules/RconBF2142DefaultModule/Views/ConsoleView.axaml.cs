@@ -29,6 +29,7 @@ public partial class ConsoleView : UserControl
         this._viewPresenter = presenter;
         this._conn = conn;
         InitializeComponent();
+        
         this._conn.OnStart += this.OnStart;
         this._conn.OnStop += this.OnStop;
         

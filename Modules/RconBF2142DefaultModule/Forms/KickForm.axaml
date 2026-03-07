@@ -1,0 +1,17 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="450"
+             xmlns:u="https://irihi.tech/ursa"
+             x:Class="Agenda.Modules.RconBF2142DefaultModule.Forms.KickForm">
+    <Border Padding="12 10">
+        <Grid RowDefinitions="Auto, Auto, Auto" RowSpacing="5" Width="400" >
+            <TextBlock Grid.Row="0" Text="Kick a player from the server" Classes="H5" Theme="{StaticResource TitleTextBlock}" Margin="0 0 0 10"/>
+            <u:Form Grid.Row="1" LabelPosition="Top" LabelWidth="*">
+                <AutoCompleteBox Name="AutoCompleteBoxReason" Width="400" Watermark="Reason"/>
+            </u:Form>
+            <Button Grid.Row="2" Name="ButtonKick" Click="ButtonKick_OnClick" HorizontalAlignment="Right" Content="Kick"/>
+        </Grid>
+    </Border>
+</UserControl>
