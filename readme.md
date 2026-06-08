@@ -9,6 +9,7 @@
 <p align="center">
     <img alt="GitHub Release" src="https://img.shields.io/github/v/release/VordyV/Agenda">
 </p>
+
 ___
 ### Supported Platforms
 
