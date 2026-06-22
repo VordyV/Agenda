@@ -21,6 +21,12 @@
                             <PathIcon Data="{DynamicResource SemiIconActivity}"/>
                         </u:NavMenuItem.Icon>
                     </u:NavMenuItem>
+                    
+                    <u:NavMenuItem Header="Logs" Name="nmlogs">
+                        <u:NavMenuItem.Icon>
+                            <PathIcon Data="{DynamicResource SemiIconActivity}"/>
+                        </u:NavMenuItem.Icon>
+                    </u:NavMenuItem>
                 
                 </u:NavMenu>
             </Border>

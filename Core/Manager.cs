@@ -165,7 +165,7 @@ public class Manager
         }
         catch (Exception e)
         {
-            this.SetState(conn, new DriverState() { Type = TypeDriverState.Error, ErrorDetail = e.Message });
+            this.SetState(conn, new DriverState() { Type = TypeDriverState.Error, ErrorDetail = e.Message, Traceback = e.StackTrace});
         }
         
         try

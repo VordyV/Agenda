@@ -24,7 +24,8 @@ public partial class RconBf2142DefaultView : BasicView
             views: new()
             {
                 {"nmconsole", (mgr, ptr, arg) => new ConsoleView(presenter: ptr, conn: (Connection)arg)},
-                {"nmplayers", (mgr, ptr, arg) => new PlayersView(presenter: ptr, conn: (Connection)arg)}
+                {"nmplayers", (mgr, ptr, arg) => new PlayersView(presenter: ptr, conn: (Connection)arg)},
+                {"nmlogs", (mgr, ptr, arg) => new LogsView(presenter: ptr, conn: (Connection)arg)}
             }
         );
         this._viewPresenter.OnShowView += this._onShowView;

@@ -64,11 +64,12 @@ public partial class MainWindow : Window
         Debug.WriteLine($"[{connId}] state={state?.Type.ToString()} connected={connected?.ToString()}");
         if (state is not null && state.Type == TypeDriverState.Error)
         {
-            Debug.WriteLine($"[{connId}] {state.ErrorDetail}");
+            Debug.WriteLine($"[{connId}] {state.ErrorDetail} \n{state.Traceback}");
             this._notificationManager.Show(
                 new Notification("Session ended unexpectedly", state.ErrorDetail),
                 showIcon: true,
                 showClose: true,
+                expiration: TimeSpan.FromSeconds(10),
                 type: NotificationType.Error);
         }
     }

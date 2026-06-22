@@ -13,6 +13,10 @@ namespace Agenda.Modules.RconBF2142DefaultModule;
 
 public class RconBf2142DefaultDriver : BasicDriver
 {
+    public event Func<RconTask, Task>? OnTaskCreated;
+    public event Func<RconTask, Task>? OnTaskSuccess;
+    public event Func<RconTask, Task>? OnTaskError;
+    
     private Socket _socket;
     private ConcurrentQueue<RconTask> _tasks = new();
     
@@ -26,8 +30,15 @@ public class RconBf2142DefaultDriver : BasicDriver
     public async Task SendAsync(string taskName, string command, Dictionary<string, string>? details = null)
     {
         byte[] data = Encoding.UTF8.GetBytes("\x02"+command+"\n");
-        this._tasks.Enqueue(new RconTask(name: taskName, command: command, details: details));
+        await this.CreateTask(new RconTask(name: taskName, command: command, details: details));
         if (this._socket.Connected) await this._socket.SendAsync(data);
+    }
+
+    private async Task CreateTask(RconTask task)
+    {
+        this._tasks.Enqueue(task);
+        if (this.OnTaskCreated == null) return;
+        await this.OnTaskCreated.Invoke(task);
     }
 
     private async Task<string> AwaitData(string endCharacter)
@@ -48,7 +59,7 @@ public class RconBf2142DefaultDriver : BasicDriver
     {
         this._socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
         IPAddress addr = (IPAddress)fields["address"];
-        int port = (int)fields["rcon_port"];
+        ushort port = (ushort)fields["rcon_port"];
         string password = (string)fields["rcon_password"];
         
         try
@@ -109,8 +120,8 @@ public class RconBf2142DefaultDriver : BasicDriver
         while (this._socket.Connected)
         {
             bytes = await this._socket.ReceiveAsync(responseBytes, this.Token);
-            value = Encoding.UTF8.GetString(responseBytes, 0, bytes).Replace("\x04", "");
-            if (value.Substring(value.Length-1) == "\n") value = value.Remove(value.Length-1);
+            value = Encoding.UTF8.GetString(responseBytes, 0, bytes).Replace("\x04", "").TrimEnd('\n');
+            //if (value.Substring(value.Length-1) == "\n") value = value.Remove(value.Length-1);
             var s = this._tasks.TryDequeue(out rconTask);
             if (s)
             {

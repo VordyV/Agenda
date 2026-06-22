@@ -1,0 +1,35 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="700" d:DesignHeight="450"
+             xmlns:u="https://irihi.tech/ursa"
+             xmlns:iconPacks="https://github.com/MahApps/IconPacks.Avalonia"
+             x:Class="Agenda.Modules.RconBF2142AS.RconBF2142ASView">
+    <Grid ColumnDefinitions="Auto, *">
+        <Border
+            Grid.Column="0"
+            Padding="0"
+            HorizontalAlignment="Left"
+            Theme="{DynamicResource CardBorder}">
+            <u:NavMenu Name="NavMenu" SelectionChanged="NavMenu_OnSelectionChanged">
+                <u:NavMenuItem Name="NavMenuItem_Console" Header="Console" >
+                    <u:NavMenuItem.Icon>
+                        <iconPacks:PackIconBootstrapIcons Kind="Terminal"/>
+                    </u:NavMenuItem.Icon>
+                </u:NavMenuItem>
+                <u:NavMenuItem Name="NavMenuItem_Players" Header="Players" >
+                    <u:NavMenuItem.Icon>
+                        <iconPacks:PackIconBootstrapIcons Kind="People"/>
+                    </u:NavMenuItem.Icon>
+                </u:NavMenuItem>
+                <u:NavMenuItem Name="NavMenuItem_Logs" Header="Logs" >
+                    <u:NavMenuItem.Icon>
+                        <iconPacks:PackIconBootstrapIcons Kind="Journal"/>
+                    </u:NavMenuItem.Icon>
+                </u:NavMenuItem>
+            </u:NavMenu> 
+        </Border>
+        <ContentPresenter Grid.Column="1" Name="MainContent"/>
+    </Grid>
+</UserControl>

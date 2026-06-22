@@ -19,4 +19,9 @@ public partial class KickForm : UserControl
     {
         if (DataContext is DialogContext ctx) ctx.Close(this.AutoCompleteBoxReason.Text ?? "");
     }
+
+    private void CheckBoxNop_OnClick(object? sender, RoutedEventArgs e)
+    {
+        this.AutoCompleteBoxReason.IsEnabled = !this.AutoCompleteBoxReason.IsEnabled;
+    }
 }

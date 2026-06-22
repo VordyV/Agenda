@@ -90,7 +90,6 @@ public partial class PlayersView : UserControl
 
     private async void OnRecv(RconTask rt)
     {
-        Console.WriteLine(rt.Name);
         if (rt.Name == "players")
         {
             if (rt.Result is null) return;
@@ -110,6 +109,11 @@ public partial class PlayersView : UserControl
         {
             if (rt.Result == "") NotificationManager.ShowInfo("Operation completed", $"Player {rt.Details["nick"]}({rt.Details["pid"]}) kicked");
             else NotificationManager.ShowError("Operation failed", $"Player {rt.Details["nick"]}({rt.Details["pid"]}) not kicked: {rt.Result}");
+        }
+        else if (rt.Name == "players_ban")
+        {
+            if (rt.Result == "") NotificationManager.ShowInfo("Operation completed", $"Player {rt.Details["nick"]}({rt.Details["pid"]}) banned");
+            else NotificationManager.ShowError("Operation failed", $"Player {rt.Details["nick"]}({rt.Details["pid"]}) not banned: {rt.Result}");
         }
     }
     
@@ -163,7 +167,25 @@ public partial class PlayersView : UserControl
     {
         if (this.DataGridPlayers.SelectedItem is Player player)
         {
-            Console.WriteLine(player.Nick);
+            var context = new DialogContext();
+            Ban? result = await OverlayDialog.ShowCustomModal<Ban>(new BanForm(nick: player.Nick) {DataContext = context}, context, hostId: "main");
+            if (result is null) return;
+
+            if (this._conn.Driver is RconBf2142DefaultDriver driver)
+            {
+                string timeout = "";
+                string cmd = "admin.banPlayer";
+                
+                if (result.Round) timeout = " round";
+                else if (result.Perm) timeout = " perm";
+                else timeout = $" {result.Timeout?.Seconds.ToString()}";
+
+                if (result.Type == BanType.Key) cmd = "admin.banPlayerKey";
+                
+                if (result.Notify) await driver.SendAsync("notify", $"exec game.sayAll \"{player.Nick} was banned for {timeout} for reason {result.Reason}\"", new() {{"nick", player.Nick}, {"pid", player.PID}});
+                await driver.SendAsync("players_ban", $"exec {cmd} {player.PID}{timeout}", new() {{"nick", player.Nick}, {"pid", player.PID}});
+            }
+            //if (this._conn.Driver is RconBf2142DefaultDriver driver) await driver.SendAsync("players_kick", $"exec admin.kickPlayer {player.PID}", new() {{"nick", player.Nick}, {"pid", player.PID}});
         }
     }
 }

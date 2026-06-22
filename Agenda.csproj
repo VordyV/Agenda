@@ -13,6 +13,7 @@
         <Title>Agenda</Title>
         <RepositoryUrl>https://github.com/VordyV/Agenda</RepositoryUrl>
         <Company>Vorklab</Company>
+        <ApplicationIcon>Media\Logo\logo.ico</ApplicationIcon>
     </PropertyGroup>
 
     <ItemGroup>
@@ -27,6 +28,7 @@
         </PackageReference>
         <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
         <PackageReference Include="FluentValidation" Version="12.1.1" />
+        <PackageReference Include="IconPacks.Avalonia.BootstrapIcons" Version="1.3.1" />
         <PackageReference Include="Irihi.Ursa" Version="1.14.1" />
         <PackageReference Include="Irihi.Ursa.Themes.Semi" Version="1.14.1" />
         <PackageReference Include="LiveMarkdown.Avalonia" Version="1.7.0" />
@@ -37,5 +39,11 @@
 
     <ItemGroup>
       <Folder Include="Modules\TCPCModule\Forms\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="rconnet.dotnet">
+        <HintPath>rconnet.dotnet.dll</HintPath>
+      </Reference>
     </ItemGroup>
 </Project>

@@ -4,9 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="450"
              xmlns:md="clr-namespace:LiveMarkdown.Avalonia;assembly=LiveMarkdown.Avalonia"
+             xmlns:c="clr-namespace:Agenda.Controls"
              x:Class="Agenda.Forms.AboutForm">
-    <Border Padding="10 12" Width="350" Height="400">
+    <c:FormControl Height="400">
         <md:MarkdownRenderer Name="MarkdownContent"/>
-    </Border>
+    </c:FormControl>
     
 </UserControl>

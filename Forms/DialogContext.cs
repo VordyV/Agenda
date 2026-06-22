@@ -20,6 +20,11 @@ public partial class DialogContext : ObservableObject, IDialogContext
     {
         RequestClose?.Invoke(this, result);
     }
+    
+    public void Close(object result)
+    {
+        RequestClose?.Invoke(this, result);
+    }
   
     public event EventHandler<object?>? RequestClose;  
 }

@@ -1,0 +1,64 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="450"
+             xmlns:u="https://irihi.tech/ursa"
+             xmlns:c="clr-namespace:Agenda.Controls"
+             xmlns:iconPacks="https://github.com/MahApps/IconPacks.Avalonia"
+             x:Class="Agenda.Modules.RconBF2142DefaultModule.Forms.BanForm">
+    <c:FormControl Title="Ban a player from the server">
+        <c:FormControl.Content>
+            <StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0 0 0 10">
+                    <TextBlock Name="TextBlockDesc" Text="Specify the ban parameters for player "/>
+                    <SelectableTextBlock Name="TextBlockNick" Text="1" FontWeight="Bold" Classes="Underline"/>
+                </StackPanel>
+                <u:Form LabelPosition="Top" LabelWidth="*">
+                    <AutoCompleteBox Name="AutoCompleteBoxReason" u:FormItem.Label="Reason" Width="400" Watermark="Reason"/>
+                    <CheckBox Name="CheckBoxNop" Click="CheckBoxNop_OnClick" Content="Notify other players" IsChecked="True"/>
+                    <Grid u:FormItem.Label="Duration" ColumnDefinitions="*, *" RowDefinitions="*, *" ColumnSpacing="7" RowSpacing="7">
+                        <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" ColumnDefinitions="*, *" ColumnSpacing="7">
+                            <RadioButton Grid.Column="0" Name="RadioButtonPerm" Theme="{DynamicResource PureCardRadioButton}" HorizontalContentAlignment="Center">
+                                <StackPanel>
+                                    <iconPacks:PackIconBootstrapIcons Kind="EmojiDizzy" HorizontalAlignment="Center"/>
+                                    <TextBlock Text="Permanently"/>
+                                </StackPanel>
+                            </RadioButton>
+                            <RadioButton Grid.Column="1" Name="RadioButtonRound" Theme="{DynamicResource PureCardRadioButton}" HorizontalContentAlignment="Center">
+                                <StackPanel>
+                                    <iconPacks:PackIconBootstrapIcons Kind="Alarm" HorizontalAlignment="Center"/>
+                                    <TextBlock Text="Current round only"/>
+                                </StackPanel>
+                            </RadioButton>
+                        </Grid>
+                        <TextBox Name="TextBoxDuration" Grid.Column="0" Grid.Row="0"/>
+                        <ComboBox Name="ComboBoxDuration" Grid.Column="1" Grid.Row="0" HorizontalAlignment="Stretch" SelectedIndex="0">
+                            <ComboBoxItem Name="BoxItemCBDminutes" Content="minutes"/>
+                            <ComboBoxItem Name="BoxItemCBDhours" Content="hours"/>
+                            <ComboBoxItem Name="BoxItemCBDdays" Content="days"/>
+                            <ComboBoxItem Name="BoxItemCBDmonths" Content="months"/>
+                        </ComboBox>
+                    </Grid>
+                    <Grid u:FormItem.Label="Identification type" ColumnDefinitions="*, *" ColumnSpacing="7">
+                        <RadioButton Grid.Column="0" Name="RadioButtonAddress" IsChecked="True" Theme="{DynamicResource PureCardRadioButton}" HorizontalContentAlignment="Center">
+                            <StackPanel>
+                                <iconPacks:PackIconBootstrapIcons Kind="Globe" HorizontalAlignment="Center"/>
+                                <TextBlock Text="IP-Address"/>
+                            </StackPanel>
+                        </RadioButton>
+                        <RadioButton Grid.Column="1" Name="RadioButtonKey" Theme="{DynamicResource PureCardRadioButton}" HorizontalContentAlignment="Center">
+                            <StackPanel>
+                                <iconPacks:PackIconBootstrapIcons Kind="Key" HorizontalAlignment="Center"/>
+                                <TextBlock Text="CD-Key hash"/>
+                            </StackPanel>
+                        </RadioButton>
+                    </Grid>
+                </u:Form>
+            </StackPanel>
+        </c:FormControl.Content>
+        <c:FormControl.Footer>
+            <Button Name="ButtonKick" Click="ButtonKick_OnClick" HorizontalAlignment="Right" Content="Ban"/>
+        </c:FormControl.Footer>
+    </c:FormControl>
+</UserControl>

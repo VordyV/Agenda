@@ -1,0 +1,40 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="450"
+             xmlns:local="clr-namespace:Agenda.Modules.RconBF2142DefaultModule.Views"
+             x:DataType="local:LogsView"
+             x:Class="Agenda.Modules.RconBF2142DefaultModule.Views.LogsView">
+    <DataGrid ItemsSource="{Binding Items}">
+        <DataGrid.Columns>
+            <DataGridTextColumn Header="ID" Binding="{Binding ID}" IsReadOnly="True"/>
+            <DataGridTemplateColumn Header="Status">
+                <DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate>
+                        <Label Classes="Solid Green" Theme="{StaticResource TagLabel}" HorizontalAlignment="Center" Content="{Binding Status}"/>
+                    </DataTemplate>
+                </DataGridTemplateColumn.CellTemplate>
+            </DataGridTemplateColumn>
+            <DataGridTextColumn Header="Name" IsReadOnly="True" Binding="{Binding Name}"/>
+            <DataGridTemplateColumn Header="Command">
+                <DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate>
+                        <Border Theme="{StaticResource CardBorder}" Padding="3 3">
+                            <SelectableTextBlock Text="{Binding Command}"/>
+                        </Border>
+                    </DataTemplate>
+                </DataGridTemplateColumn.CellTemplate>
+            </DataGridTemplateColumn>
+            <DataGridTemplateColumn Header="Result" Width="*">
+                <DataGridTemplateColumn.CellTemplate>
+                    <DataTemplate>
+                        <Border Theme="{StaticResource CardBorder}" Padding="3 3">
+                            <SelectableTextBlock Text="{Binding Result}"/>
+                        </Border>
+                    </DataTemplate>
+                </DataGridTemplateColumn.CellTemplate>
+            </DataGridTemplateColumn>
+        </DataGrid.Columns>
+    </DataGrid>
+</UserControl>
