@@ -53,13 +53,13 @@ public partial class MainWindow : Window
         
         this.MainContent.Content = this._viewPresenter.Content;
 
-        this._manager.OnCreate += this.OnCreate;
-        this._manager.OnInit += this.OnInit;
-        this._manager.OnStop += this.OnStop;
-        this._manager.OnChangeStatus += this.OnChangeStatus;
+        this._manager.OnCreateConn += this.OnCreateConn;
+        this._manager.OnInitConn += this.OnInitConn;
+        this._manager.OnStopConn += this.OnStopConn;
+        this._manager.OnChangeStatusConn += this.OnChangeStatusConn;
     }
 
-    private void OnChangeStatus(string connId, DriverState? state, bool? connected)
+    private void OnChangeStatusConn(string connId, DriverState? state, bool? connected)
     {
         Debug.WriteLine($"[{connId}] state={state?.Type.ToString()} connected={connected?.ToString()}");
         if (state is not null && state.Type == TypeDriverState.Error)
@@ -90,7 +90,7 @@ public partial class MainWindow : Window
         OverlayDialog.ShowCustom(new ConnectForm(this._manager) {DataContext = context}, context, hostId: "main", new OverlayDialogOptions() {CanDragMove = false, CanResize = false});
     }
 
-    public async void OnCreate(string connId)
+    public async void OnCreateConn(string connId)
     {
         foreach (var conn in this._manager.GetConnections())
         {
@@ -99,7 +99,7 @@ public partial class MainWindow : Window
         }
     }
     
-    public async void OnInit(string connId, InitContext ctx)
+    public async void OnInitConn(string connId, InitContext ctx)
     {
         var conn = this._manager.GetConnection(connId);
         var ctxPcsForm = new DialogContext();
@@ -125,7 +125,7 @@ public partial class MainWindow : Window
         await OverlayDialog.ShowCustomModal<bool>(form, ctxPcsForm, hostId: "main", new OverlayDialogOptions() {IsCloseButtonVisible = false});
     }
 
-    public void OnStop(string connId)
+    public void OnStopConn(string connId)
     {
         this._manager.RemoveConnection(connId);
         Avalonia.Threading.Dispatcher.UIThread.Post(() =>

@@ -33,11 +33,11 @@ public partial class ServerView : UserControl
         
         this.MainContent.Content = this._conn.View;
 
-        this._manager.OnChangeStatus += this.OnChangeStatus;
+        this._manager.OnChangeStatusConn += this.OnChangeStatusConn;
         this.SetStatus(this._conn.Driver.State);
     }
 
-    private void OnChangeStatus(string connId, DriverState? state, bool? connected)
+    private void OnChangeStatusConn(string connId, DriverState? state, bool? connected)
     {
         if (connId != this._connId) return;
         Avalonia.Threading.Dispatcher.UIThread.Post(() =>

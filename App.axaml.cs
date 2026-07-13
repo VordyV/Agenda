@@ -27,7 +27,10 @@ public partial class App : Application
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
             desktop.MainWindow = new MainWindow(manager);
+            desktop.MainWindow.Closing += async (sender, args) => await manager.Dispose();
         }
+        
+        
 
         base.OnFrameworkInitializationCompleted();
     }

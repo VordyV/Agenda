@@ -3,6 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="700" d:DesignHeight="450"
+             xmlns:c="clr-namespace:Agenda.Forms"
              xmlns:u="https://irihi.tech/ursa"
              x:Class="Agenda.Views.HomeView">
     <Grid RowDefinitions="Auto, *">
@@ -19,6 +20,9 @@
         </Grid>
         
         <!-- BODY -->
-        <TextBlock Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">Wait, have some tea, there's nothing here yet</TextBlock>
+        <WrapPanel Grid.Row="1" Margin="26 0">
+            <c:ProfileForm NameProfile="1" NameModule="2" Image="/Media/Modules/tcpc.png" Time="12"/>
+        </WrapPanel>
+        
     </Grid>
 </UserControl>

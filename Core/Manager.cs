@@ -2,8 +2,10 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using LiteDB;
 
 namespace Agenda.Core;
 
@@ -25,12 +27,43 @@ public class Manager
     private Dictionary<string, Module> _modules = new();
     //private Dictionary<string, BasicDriver> _connections = new();
     private ConcurrentDictionary<string, Connection> _connections = new();
+    private LiteDatabase _dataBase;
+    private ILiteCollection<ProfileModel> _profileModel;
 
-    public event Action<string>? OnCreate;
-    public event Action<string, InitContext>? OnInit;
-    public event Action<string, DriverState?, bool?>? OnChangeStatus;
-    public event Action<string>? OnStop;
+    public event Action<string>? OnCreateConn;
+    public event Action<string, InitContext>? OnInitConn;
+    public event Action<string, DriverState?, bool?>? OnChangeStatusConn;
+    public event Action<string>? OnStopConn;
+    public event Action<Exception>? OnError;
+    public event Action OnInit;
 
+    public bool IsInit { get; private set; } = false;
+
+    public Manager()
+    {
+        
+    }
+
+    public async Task Init()
+    {
+        try
+        {
+            string dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "agenda");
+            if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
+            string path = Path.Combine(dir, "agenda.db");
+            this._dataBase = new LiteDatabase(path);
+            this._profileModel = this._dataBase.GetCollection<ProfileModel>("customers");
+            this.IsInit = true;
+            this.OnInit?.Invoke();
+        }
+        catch (Exception e)
+        {
+            this._error(e);
+        }
+    }
+    
+    private void _error(Exception text) => this.OnError?.Invoke(text);
+    
     public void RegisterModule(Module module)
     {
         if (this._modules.ContainsKey(module.Id)) throw new Exception($"Module {module.Id} is already registered");
@@ -83,7 +116,7 @@ public class Manager
         var view = module.View.Invoke(conn);
         conn.SetView(view);
         //this._connections.Add(connId, module.Driver.Invoke(connId, moduleId, fields));
-        this.OnCreate?.Invoke(connId);
+        this.OnCreateConn?.Invoke(connId);
         
         return connId;
     }
@@ -92,7 +125,7 @@ public class Manager
     {
         if (conn.Driver == null) return;
         conn.Driver.SetState(state, connected);
-        this.OnChangeStatus?.Invoke(conn.Id, state, connected);
+        this.OnChangeStatusConn?.Invoke(conn.Id, state, connected);
     }
 
     public async Task<bool> InitConnection(string connId)
@@ -100,7 +133,7 @@ public class Manager
         Connection conn = GetConnection(connId);
         InitContext ctx = new InitContext();
         var module = this.GetModule(conn.ModuleId);
-        this.OnInit?.Invoke(conn.Id, ctx);
+        this.OnInitConn?.Invoke(conn.Id, ctx);
         try
         {
             conn.SetDriver(module.Driver.Invoke(connId));
@@ -133,7 +166,7 @@ public class Manager
         //conn.ViewModel.Detach();
         conn.Stop();
         conn.DisposeDriver();
-        this.OnStop?.Invoke(conn.Id);
+        this.OnStopConn?.Invoke(conn.Id);
         //this._connections.Remove(connId);
         return false;
         //Task task = Task.Run(() => this._startConnLoop(driver));
@@ -181,7 +214,17 @@ public class Manager
         this.SetState(conn, connected: false);
         conn.Stop();
         conn.DisposeDriver();
-        this.OnStop?.Invoke(conn.Id);
+        this.OnStopConn?.Invoke(conn.Id);
         //this._connections.Remove(driver.Id);
+    }
+
+    public void AddProfile()
+    {
+
+    }
+
+    public async Task Dispose()
+    {
+        await Task.Run(() => this._dataBase.Dispose());
     }
 }
