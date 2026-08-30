@@ -83,4 +83,7 @@ public static class Settings
                                      
                                      Powered by Vorklab.space
                                      """;
+    
+    public static string PluginEntryPoint = "Manifest.Main";
+    public static string PluginsDir = "plugins";
 }

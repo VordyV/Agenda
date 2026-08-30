@@ -21,7 +21,7 @@ public partial class App : Application
 
     public override async void OnFrameworkInitializationCompleted()
     {
-        AgendaCore agendaCore = new AgendaCore();
+        AgendaCore agendaCore = new AgendaCore() {PluginEntryPoint = Settings.PluginEntryPoint, PluginsDir = Settings.PluginsDir};
         agendaCore.RegisterModules(Settings.Modules);
         
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)

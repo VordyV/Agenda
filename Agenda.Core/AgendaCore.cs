@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using BLite.Bson;
 using BLite.Core;
@@ -36,6 +37,7 @@ public class AgendaCore
     private ConcurrentDictionary<string, Connection> _connections = new();
     private ConcurrentDictionary<string, Connection> _previewConnections = new();
     private AppDbContext _appDbContext;
+    private ConcurrentDictionary<string, Assembly> _plugins = new();
 
     // OnCreateConn
     private AsyncEventHandler<CreateConnEventArgs> _onCreateConn = new(InvokeMode.Parallel);
@@ -62,6 +64,9 @@ public class AgendaCore
     public event AsyncEvent<bool> OnReady { add => _onReady.Register(value); remove => _onReady.Unregister(value); }
 
     public bool IsReady { get; private set; } = false;
+    
+    public string PluginEntryPoint { get; set; }
+    public string PluginsDir { get; set; }
 
     public AgendaCore()
     {
@@ -74,18 +79,49 @@ public class AgendaCore
         {
             await Task.Run(() =>
             {
+                this.LoadPlugins();
+                
                 string dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "agenda");
                 if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
                 string path = Path.Combine(dir, "agenda.db");
                 this._appDbContext = new AppDbContext(path);
             });
-
+            
             this.IsReady = true;
             this._onReady.InvokeAsync(IsReady);
         }
         catch (Exception e)
         {
             this._error(e);
+        }
+    }
+
+    public void LoadPlugin(string path)
+    {
+        Assembly asm = Assembly.LoadFrom(path);
+        Type? type = asm.GetType(this.PluginEntryPoint);
+        if (type is null) throw new Exception($"Plugin {path} does not have entry point 1");
+        object? instance = Activator.CreateInstance(type);
+        FieldInfo? fieldInfo = type.GetField("Module");
+        Module? module = fieldInfo?.GetValue(instance) as Module;
+        if (fieldInfo is null || module is null) throw new Exception($"In plugin {path}, its entry point does not have the required Module field");
+        this.RegisterModule(module);
+    }
+
+    public void LoadPlugins()
+    {
+        string[] files = Directory.GetFiles(Path.Combine(Directory.GetCurrentDirectory(), this.PluginsDir));
+
+        foreach (var file in files)
+        {
+            try
+            {
+                this.LoadPlugin(file);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
         }
     }
     
