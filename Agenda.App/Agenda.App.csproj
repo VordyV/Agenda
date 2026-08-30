@@ -1,0 +1,58 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <OutputType>WinExe</OutputType>
+        <TargetFramework>net9.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ApplicationManifest>app.manifest</ApplicationManifest>
+        <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+        <Version>0.1.0</Version>
+        <Authors>Vladislav Netiesky</Authors>
+        <AssemblyVersion>0.1.0</AssemblyVersion>
+        <FileVersion>0.1.0</FileVersion>
+        <NeutralLanguage>en-US</NeutralLanguage>
+        <Title>Agenda</Title>
+        <RepositoryUrl>https://github.com/VordyV/Agenda</RepositoryUrl>
+        <Company>Vorklab</Company>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <AvaloniaResource Include="Media\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Avalonia" Version="12.1.0" />
+      <PackageReference Include="Avalonia.Desktop" Version="12.1.0" />
+      <PackageReference Include="Avalonia.Fonts.Inter" Version="12.1.0" />
+      <PackageReference Include="Avalonia.Themes.Fluent" Version="12.1.0" />
+      <PackageReference Include="AvaloniaUI.DiagnosticsSupport" Version="2.2.3" />
+      <PackageReference Include="BLite" Version="5.0.3" />
+      <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
+      <PackageReference Include="FluentValidation" Version="12.1.1" />
+      <PackageReference Include="Irihi.Ursa" Version="2.2.0" />
+      <PackageReference Include="Irihi.Ursa.Themes.Semi" Version="2.2.0" />
+      <PackageReference Include="LiveMarkdown.Avalonia" Version="2.2.0" />
+      <PackageReference Include="rconnet.dotnet" Version="1.1.1" />
+      <PackageReference Include="Semi.Avalonia" Version="12.1.0.1" />
+      <PackageReference Include="Semi.Avalonia.DataGrid" Version="12.1.0" />
+      <PackageReference Include="ZeroAlloc.AsyncEvents" Version="1.1.2" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="Modules\RconBF2142ASModule\RconBF2142ASView.axaml.cs">
+        <DependentUpon>RconBF2142ASView.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Modules\RconBF2142ASModule\RconBF2142ASView.axaml.cs">
+        <DependentUpon>SimpleView.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+      <AdditionalFiles Include="Modules\RconBF2142ASModule\RconBF2142ASView.axaml" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Agenda.Core\Agenda.Core.csproj" />
+    </ItemGroup>
+</Project>

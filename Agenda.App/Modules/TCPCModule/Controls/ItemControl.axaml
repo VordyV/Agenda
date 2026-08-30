@@ -1,0 +1,16 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="450"
+             x:Class="Agenda.Modules.TCPCModule.Controls.ItemControl">
+    <Grid ColumnDefinitions="Auto, *, Auto">
+        <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="2">
+            <Label Name="LabelTime" Classes="White" Theme="{StaticResource TagLabel}"/>
+            <Label Name="LabelType" Theme="{StaticResource TagLabel}"/>
+        </StackPanel>
+        <SelectableTextBlock Grid.Column="1" TextWrapping="Wrap" Name="SelectableTextBlockData" IsEnabled="True"/>
+        <SelectableTextBlock Grid.Column="1" TextWrapping="Wrap" Name="SelectableTextBlockDataByte" IsEnabled="False"/>
+    </Grid>
+
+</UserControl>
