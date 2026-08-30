@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Avalonia" Version="12.1.0" />
+      <PackageReference Include="Avalonia.Desktop" Version="12.1.0" />
+      <PackageReference Include="Avalonia.Fonts.Inter" Version="12.1.0" />
+      <PackageReference Include="Avalonia.Themes.Fluent" Version="12.1.0" />
+      <PackageReference Include="AvaloniaUI.DiagnosticsSupport" Version="2.2.3" />
+      <PackageReference Include="BLite" Version="5.0.3" />
+      <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
+      <PackageReference Include="Irihi.Ursa" Version="2.2.0" />
+      <PackageReference Include="Irihi.Ursa.Themes.Semi" Version="2.2.0" />
+      <PackageReference Include="ZeroAlloc.AsyncEvents" Version="1.1.2" />
+    </ItemGroup>
+
+</Project>
