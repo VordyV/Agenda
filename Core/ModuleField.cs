@@ -13,9 +13,9 @@ public class ModuleField
     public Func<object, ValidatorResult>? Validator { get; private set; }
     
     public bool Required { get; private set; }
-    public object? Value { get; private set; }
+    public string? Value { get; private set; }
 
-    public ModuleField(string id, string title, Func<BaseModelFieldControl> control, Func<object, ValidatorResult>? validator = null, bool required = false, object? value = null)
+    public ModuleField(string id, string title, Func<BaseModelFieldControl> control, Func<object, ValidatorResult>? validator = null, bool required = false, string? value = null)
     {
         this.Id = id;
         this.Title = title;

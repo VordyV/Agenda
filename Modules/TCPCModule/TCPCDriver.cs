@@ -35,11 +35,11 @@ public class TCPCDriver : BasicDriver
         }
     }
 
-    public override async Task OnStart(InitContext ctx, Dictionary<string, object?> fields)
+    public override async Task OnStart(InitContext ctx, Dictionary<string, string?> fields)
     {
         this._socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-        IPAddress addr = (IPAddress)fields["address"];
-        int port = (int)fields["port"];
+        IPAddress addr = IPAddress.Parse(fields["address"]);
+        int port = int.Parse(fields["port"]);
         try
         {
             await this._socket.ConnectAsync(addr, port, this.Token);

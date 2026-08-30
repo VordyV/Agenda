@@ -8,6 +8,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Agenda.Core;
+using rconnet.RconBf2142.Default;
 
 namespace Agenda.Modules.RconBF2142DefaultModule;
 
@@ -44,12 +45,12 @@ public class RconBf2142DefaultDriver : BasicDriver
         return result;
     }
 
-    public override async Task OnStart(InitContext ctx, Dictionary<string, object?> fields)
+    public override async Task OnStart(InitContext ctx, Dictionary<string, string?> fields)
     {
         this._socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-        IPAddress addr = (IPAddress)fields["address"];
-        int port = (int)fields["rcon_port"];
-        string password = (string)fields["rcon_password"];
+        IPAddress addr = IPAddress.Parse(fields["address"]);
+        int port = int.Parse(fields["rcon_port"]);
+        string password = fields["rcon_password"];
         
         try
         {
@@ -118,5 +119,24 @@ public class RconBf2142DefaultDriver : BasicDriver
                 this.OnRecv?.Invoke(rconTask);
             }
         }
+    }
+    
+    public override async Task<Preview> OnPreview()
+    {
+        List<PreviewField> previewFields = new();
+        string color = "#f02b1d";
+
+        try
+        {
+            color = "#42f575";
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            previewFields.Add(new StatusPreviewField() {Label = "Status", Text = "Offline", Color = "Red"});
+            previewFields.Add(new PlayersPreviewField() {Label = "Players", CurrentNumber = 0, MaxNumber = 0});
+        }
+        
+        return new Preview() { Fields = previewFields.ToArray(), Color = color };
     }
 }

@@ -12,13 +12,13 @@ public class IntFieldControl : BaseModelFieldControl
         this.Content = _numericUpDown;
     }
 
-    public override object? GetValue()
+    public override string? GetValue()
     {
         if (this._numericUpDown.Value == null) return null;
-        return (int)this._numericUpDown.Value;
+        return this._numericUpDown.Value.ToString();
     }
 
-    public override void SetValue(object value) => this._numericUpDown.Value = (int)value;
+    public override void SetValue(string? value) => this._numericUpDown.Value = int.Parse(value);
 
     public override Control GetControl() => this._numericUpDown;
 }

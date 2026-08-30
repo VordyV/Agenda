@@ -83,7 +83,7 @@ public partial class PlayersView : UserControl
         if (this._conn.Driver is RconBf2142DefaultDriver driver) driver.OnRecv -= this.OnRecv;
     }
 
-    private async void OnTimerTick(object? sender, EventArgs e)
+    private async void OnTimerTick(object? sender, System.EventArgs e)
     {
         if (this._conn.Driver is RconBf2142DefaultDriver driver) await driver.SendAsync("players", "exec admin.listplayers");
     }

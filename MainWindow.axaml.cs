@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using Agenda.Controls;
 using Agenda.Core;
@@ -20,7 +21,7 @@ namespace Agenda;
 
 public partial class MainWindow : Window
 {
-    private Manager _manager;
+    private AgendaCore _agendaCore;
     private ViewPresenter _viewPresenter;
     private WindowNotificationManager _notificationManager;
 
@@ -29,10 +30,10 @@ public partial class MainWindow : Window
         InitializeComponent();
     }
     
-    public MainWindow(Manager manager)
+    public MainWindow(AgendaCore agendaCore)
     {
-        this._manager = manager;
-        this._viewPresenter = new ViewPresenter(manager: this._manager, 
+        this._agendaCore = agendaCore;
+        this._viewPresenter = new ViewPresenter(manager: this._agendaCore, 
             views: new()
             {
                 {"home", (mgr, ptr, arg) => new HomeView(mgr, ptr)},
@@ -52,21 +53,34 @@ public partial class MainWindow : Window
         this.Title = $"Agenda";
         
         this.MainContent.Content = this._viewPresenter.Content;
-
-        this._manager.OnCreateConn += this.OnCreateConn;
-        this._manager.OnInitConn += this.OnInitConn;
-        this._manager.OnStopConn += this.OnStopConn;
-        this._manager.OnChangeStatusConn += this.OnChangeStatusConn;
+        
+        this._agendaCore.OnCreateConn += this.OnCreateConn;
+        this._agendaCore.OnInitConn += this.OnInitConn;
+        this._agendaCore.OnStopConn += this.OnStopConn;
+        this._agendaCore.OnChangeStatusConn += this.OnChangeStatusConn;
+        this._agendaCore.OnError += this.OnError;
+        
+        this.Loaded += async (sender, args) => await this._onLoaded(sender, args);
     }
 
-    private void OnChangeStatusConn(string connId, DriverState? state, bool? connected)
+    private async Task _onLoaded(object? sender, RoutedEventArgs args)
     {
-        Debug.WriteLine($"[{connId}] state={state?.Type.ToString()} connected={connected?.ToString()}");
-        if (state is not null && state.Type == TypeDriverState.Error)
+        await this._agendaCore.Init();
+    }
+
+    private async ValueTask OnError(ErrorEventArgs eventArgs, CancellationToken token)
+    {
+        Dialog.ShowStandard(new SelectableTextBlock() {Text = eventArgs.Error.Message}, null, this, new DialogOptions() {Title = "An unexpected error occurred", Mode = DialogMode.Error, Button = DialogButton.OK});
+    }
+    
+    private async ValueTask OnChangeStatusConn(ChangeStatusConnEventArgs eventArgs, CancellationToken token)
+    {
+        Debug.WriteLine($"[{eventArgs.ConnectionId}] state={eventArgs.State?.Type.ToString()} connected={eventArgs.IsConnected?.ToString()}");
+        if (eventArgs.State is not null && eventArgs.State.Type == TypeDriverState.Error)
         {
-            Debug.WriteLine($"[{connId}] {state.ErrorDetail}");
+            Debug.WriteLine($"[{eventArgs.ConnectionId}] {eventArgs.State?.ErrorDetail}");
             this._notificationManager.Show(
-                new Notification("Session ended unexpectedly", state.ErrorDetail),
+                new Notification("Session ended unexpectedly", eventArgs.State?.ErrorDetail),
                 showIcon: true,
                 showClose: true,
                 type: NotificationType.Error);
@@ -87,32 +101,32 @@ public partial class MainWindow : Window
     private void MenuItemConnect_OnClick(object? sender, RoutedEventArgs e)
     {
         var context = new DialogContext();
-        OverlayDialog.ShowCustom(new ConnectForm(this._manager) {DataContext = context}, context, hostId: "main", new OverlayDialogOptions() {CanDragMove = false, CanResize = false});
+        OverlayDialog.ShowCustom(new ConnectForm(this._agendaCore) {DataContext = context}, context, hostId: "main", new OverlayDialogOptions() {CanDragMove = false, CanResize = false});
     }
 
-    public async void OnCreateConn(string connId)
+    public async ValueTask OnCreateConn(CreateConnEventArgs eventArgs, CancellationToken token)
     {
-        foreach (var conn in this._manager.GetConnections())
+        foreach (var conn in this._agendaCore.GetConnections())
         {
-            if (conn.Id == connId) continue;
-            this._manager.RemoveConnection(conn.Id);
+            if (conn.Id == eventArgs.ConnectionId) continue;
+            this._agendaCore.RemoveConnection(conn.Id);
         }
     }
     
-    public async void OnInitConn(string connId, InitContext ctx)
+    public async ValueTask OnInitConn(InitConnEventArgs eventArgs, CancellationToken token)
     {
-        var conn = this._manager.GetConnection(connId);
+        var conn = this._agendaCore.GetConnection(eventArgs.ConnectionId);
         var ctxPcsForm = new DialogContext();
         var form = new ProcessIndicatorForm((o, args) => conn.Driver?.Cancel()) {DataContext = ctxPcsForm};
 
-        ctx.OnAction += async (s, t, c) =>
+        eventArgs.Context.OnAction += async (s, t, c) =>
         {
             form.SetStatus(s);
             form.SetText(t);
             if (c != null || c == InitCtxAction.Cancelled) ctxPcsForm.Close();
             if (c == InitCtxAction.Connected)
             {
-                this._viewPresenter.LoadView("server", connId, reload: true);
+                this._viewPresenter.LoadView("server", eventArgs.ConnectionId, reload: true);
                 this.MenuItemGoToActive.IsEnabled = true;
                 this.MenuItemCloseActive.IsEnabled = true;
             } else if (c == InitCtxAction.Error)
@@ -125,9 +139,16 @@ public partial class MainWindow : Window
         await OverlayDialog.ShowCustomModal<bool>(form, ctxPcsForm, hostId: "main", new OverlayDialogOptions() {IsCloseButtonVisible = false});
     }
 
-    public void OnStopConn(string connId)
+    public async ValueTask OnStopConn(StopConnConnEventArgs eventArgs, CancellationToken token)
     {
-        this._manager.RemoveConnection(connId);
+        try
+        {
+            this._agendaCore.RemoveConnection(eventArgs.ConnectionId);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
         Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
             this.MenuItemGoToActive.IsEnabled = false;
@@ -141,7 +162,7 @@ public partial class MainWindow : Window
     private void MenuItemCloseActive_OnClick(object? sender, RoutedEventArgs e)
     {
         // Since only one session can be open at a time for now, there will be only one element among the active ones
-        var conns = this._manager.GetActiveConnections();
+        var conns = this._agendaCore.GetActiveConnections();
         if (conns.Count < 1) return;
         var conn = conns[0];
         conn.Driver?.Cancel();

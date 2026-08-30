@@ -15,12 +15,12 @@ public class IPv4FieldControl : BaseModelFieldControl
         this.Content = _ipv4Box;
     }
     
-    public override object? GetValue()
+    public override string? GetValue()
     {
-        return this._ipv4Box.IPAddress;
+        return this._ipv4Box.IPAddress?.ToString();
     }
 
-    public override void SetValue(object value) => this._ipv4Box.IPAddress = (IPAddress)value;
+    public override void SetValue(string? value) => this._ipv4Box.IPAddress = IPAddress.Parse(value);
     
     public override Control GetControl() => this._ipv4Box;
 }

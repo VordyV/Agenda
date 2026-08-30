@@ -21,16 +21,14 @@ public partial class App : Application
 
     public override async void OnFrameworkInitializationCompleted()
     {
-        Manager manager = new Manager();
-        manager.RegisterModules(Settings.Modules);
+        AgendaCore agendaCore = new AgendaCore();
+        agendaCore.RegisterModules(Settings.Modules);
         
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            desktop.MainWindow = new MainWindow(manager);
-            desktop.MainWindow.Closing += async (sender, args) => await manager.Dispose();
+            desktop.MainWindow = new MainWindow(agendaCore);
+            desktop.MainWindow.Closing += async (sender, args) => await agendaCore.Dispose();
         }
-        
-        
 
         base.OnFrameworkInitializationCompleted();
     }

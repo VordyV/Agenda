@@ -11,10 +11,10 @@
                 <TextBlock Text="New session" Classes="H5" Theme="{StaticResource TitleTextBlock}" Margin="0 0 0 10"/>
                 <!--<TextBlock Text="Create a session without a pre-added profile" Margin="0 0 0 10"/>-->
                 <u:Form Name="FormProfile" LabelPosition="Top" LabelWidth="*">
-                    <ComboBox Name="ComboBoxType" SelectionChanged="ComboBoxType_OnSelectionChanged" Width="400" u:FormItem.Label="Type" u:FormItem.IsRequired="True"/>
+                    <ComboBox Name="ComboBoxType" SelectionChanged="ComboBoxType_OnSelectionChanged" Width="400" u:FormItem.Label="Module" u:FormItem.IsRequired="True"/>
                 </u:Form>
                 <SelectableTextBlock Name="TextBlockDescription" TextWrapping="Wrap" Padding="0 10"/>
-                <u:Divider Name="Divider" Content="Options"/>
+                <u:Divider Name="Divider" Content="Fields"/>
                 <u:Form Name="FormDynamic" LabelPosition="Top" LabelWidth="*"/>
             </StackPanel>
             <Button Grid.Row="1" Click="Button_OnClick" HorizontalAlignment="Right" Content="Connect" Theme="{StaticResource SolidButton}"/>

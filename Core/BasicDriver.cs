@@ -31,10 +31,13 @@ public abstract class BasicDriver
     private CancellationTokenSource _cancelTokenSource = new CancellationTokenSource();
     public CancellationToken Token => this._cancelTokenSource.Token;
     
-    public virtual async Task OnStart(InitContext ctx, Dictionary<string, object?> fields) {}
+    public virtual async Task OnStart(InitContext ctx, Dictionary<string, string?> fields) {}
     public virtual async Task OnStop() {}
     
     public virtual async Task OnLoop() {}
+
+    public virtual async Task<Preview> OnPreview() { return null; }
+    public virtual async Task<Preview> OnPreviewError() { return null; }
 
     public void SetState(DriverState? state = null, bool? connected = null)
     {

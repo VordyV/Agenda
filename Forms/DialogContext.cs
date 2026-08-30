@@ -11,12 +11,7 @@ public partial class DialogContext : ObservableObject, IDialogContext
         RequestClose?.Invoke(this, true);  
     }
     
-    public void Close(bool result)
-    {
-        RequestClose?.Invoke(this, result);
-    }
-    
-    public void Close(string result)
+    public void Close(object? result)
     {
         RequestClose?.Invoke(this, result);
     }

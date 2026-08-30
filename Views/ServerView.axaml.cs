@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using Agenda.Controls;
 using Agenda.Core;
 using Avalonia;
@@ -12,7 +14,7 @@ namespace Agenda.Views;
 
 public partial class ServerView : UserControl
 {
-    private Manager _manager;
+    private AgendaCore _agendaCore;
     private ViewPresenter _presenter;
     private string _connId;
     private Connection _conn;
@@ -22,27 +24,27 @@ public partial class ServerView : UserControl
         InitializeComponent();
     }
     
-    public ServerView(Manager manager, ViewPresenter presenter, object? connId)
+    public ServerView(AgendaCore agendaCore, ViewPresenter presenter, object? connId)
     {
-        this._manager = manager;
+        this._agendaCore = agendaCore;
         this._presenter = presenter;
         if (!(connId is string)) throw new Exception("");
         InitializeComponent();
         this._connId = (string)connId;
-        this._conn = this._manager.GetConnection(this._connId);
+        this._conn = this._agendaCore.GetConnection(this._connId);
         
         this.MainContent.Content = this._conn.View;
 
-        this._manager.OnChangeStatusConn += this.OnChangeStatusConn;
+        this._agendaCore.OnChangeStatusConn += this.OnChangeStatusConn;
         this.SetStatus(this._conn.Driver.State);
     }
 
-    private void OnChangeStatusConn(string connId, DriverState? state, bool? connected)
+    private async ValueTask OnChangeStatusConn(ChangeStatusConnEventArgs eventArgs, CancellationToken token)
     {
-        if (connId != this._connId) return;
+        if (eventArgs.ConnectionId != this._connId) return;
         Avalonia.Threading.Dispatcher.UIThread.Post(() =>
         {
-            if (state is not null) this.SetStatus(state);
+            if (eventArgs.State is not null) this.SetStatus(eventArgs.State);
         });
     }
 

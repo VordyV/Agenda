@@ -5,7 +5,7 @@ using LiveMarkdown.Avalonia;
 
 namespace Agenda.Forms;
 
-public partial class AboutForm : UserControl
+public partial class AboutForm : Form
 {
     public AboutForm()
     {

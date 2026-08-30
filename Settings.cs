@@ -27,7 +27,10 @@ public static class Settings
                 new ModuleField(id: "address", title: "Address", control: () => new IPv4FieldControl(), required: true, validator: (data) => new ModuleFieldValidator(length: 15).Validate(data)),
                 new ModuleField(id: "query_port", title: "Query port", control: () => new IntFieldControl(min: 1.0m, max: 65535.0m), required: true, validator: (data) => new ModuleFieldValidator(maxNum: 65535, minNum: 1).Validate(data))
             ],
-            driver: (connId) => new SimpleModule.SimpleDriver(connId)
+            driver: typeof(SimpleModule.SimpleDriver),
+            subtitleFormat: "{address}:**{query_port}**",
+            preview: true,
+            numberPreviewFields: 1
         ),
         new Module(
             id: "tcpc",
@@ -40,21 +43,27 @@ public static class Settings
                 new ModuleField(id: "address", title: "Address", control: () => new IPv4FieldControl(), required: true, validator: (data) => new ModuleFieldValidator(length: 15).Validate(data)),
                 new ModuleField(id: "port", title: "Port", control: () => new IntFieldControl(min: 1.0m, max: 65535.0m), required: true, validator: (data) => new ModuleFieldValidator(maxNum: 65535, minNum: 1).Validate(data))
             ],
-            driver: (connId) => new TCPCDriver(connId)
+            driver: typeof(TCPCDriver),
+            subtitleFormat: "",
+            preview: false,
+            numberPreviewFields: 1
         ),
         new Module(
             id: "rconbf2142default",
-            title: "Rcon BF2142 Default",
+            title: "Rcon BF2142 - AdminScript",
             version: "0.1",
-            description: "A client for remote control of a Battlefield 2142 game server via the RCON protocol, protocol module - Default",
+            description: "A client for remote control of a Battlefield 2142 game server via the RCON protocol, protocol module - 'adminscript'",
             view: (conn) => new RconBF2142DefaultModule.RconBf2142DefaultView(conn),
             fields: 
             [
-                new ModuleField(id: "address", title: "Address", control: () => new IPv4FieldControl(), required: true, validator: (data) => new ModuleFieldValidator(length: 15).Validate(data), value: IPAddress.Parse("127.0.0.1")),
-                new ModuleField(id: "rcon_port", title: "Rcon port", control: () => new IntFieldControl(min: 1.0m, max: 65535.0m), required: true, validator: (data) => new ModuleFieldValidator(maxNum: 65535, minNum: 1).Validate(data), value: 4711),
+                new ModuleField(id: "address", title: "Address", control: () => new IPv4FieldControl(), required: true, validator: (data) => new ModuleFieldValidator(length: 15).Validate(data), value: "127.0.0.1"),
+                new ModuleField(id: "rcon_port", title: "Rcon port", control: () => new IntFieldControl(min: 1.0m, max: 65535.0m), required: true, validator: (data) => new ModuleFieldValidator(maxNum: 65535, minNum: 1).Validate(data), value: "4711"),
                 new ModuleField(id: "rcon_password", title: "Rcon password", control: () => new PasswordFieldControl(), required: true, validator: (data) => new ModuleFieldValidator(length: 128).Validate(data), value: "super123")
             ],
-            driver: (connId) => new RconBF2142DefaultModule.RconBf2142DefaultDriver(connId)
+            driver: typeof(RconBF2142DefaultModule.RconBf2142DefaultDriver),
+            subtitleFormat: "{address}:{rcon_port}",
+            preview: false,
+            numberPreviewFields: 2
         )
     };
     

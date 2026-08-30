@@ -17,11 +17,11 @@ public class SimpleDriver : BasicDriver
         
     }
 
-    public override async Task OnStart(InitContext ctx, Dictionary<string, object?> fields)
+    public override async Task OnStart(InitContext ctx, Dictionary<string, string?> fields)
     {
         Console.WriteLine("1");
         ctx.Action("1", "11");
-        await Task.Delay(1000, this.Token);
+        await Task.Delay(1000, this.Token); 
         ctx.Action("2", "22");
         await Task.Delay(1000, this.Token);
         //throw new InitException("rA9", "Connor didn't show up to Amanda's");
@@ -40,5 +40,26 @@ public class SimpleDriver : BasicDriver
             await Task.Delay(1);
         }
         Console.WriteLine("4");
+    }
+
+    public override async Task<Preview> OnPreview()
+    {
+        List<PreviewField> previewFields = new();
+
+        Console.WriteLine("PV1");
+        await Task.Delay(1000);
+        previewFields.Add(new StatusPreviewField() {Label = "Status", Text = "Green", Color = "Green"});
+        Console.WriteLine("PV2");
+        
+        return new Preview() {Fields = previewFields.ToArray(), Color = "green"};
+    }
+    
+    public override async Task<Preview> OnPreviewError()
+    {
+        List<PreviewField> previewFields = new();
+        
+        previewFields.Add(new StatusPreviewField() {Label = "Status", Text = "Red", Color = "Red"});
+        
+        return new Preview() {Fields = previewFields.ToArray(), Color = "red"};
     }
 }

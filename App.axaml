@@ -3,18 +3,17 @@
              x:Class="Agenda.App"
              xmlns:semi="https://irihi.tech/semi"
              xmlns:u-semi="https://irihi.tech/ursa/themes/semi"
-             xmlns:iconPacks="https://github.com/MahApps/IconPacks.Avalonia"
              RequestedThemeVariant="Default">
              <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 
     <Application.Styles>
         <FluentTheme />
-        <semi:SemiTheme Locale="zh-CN" />
-        <u-semi:SemiTheme Locale="zh-CN"/>
-        <StyleInclude Source="avares://LiveMarkdown.Avalonia/Styles.axaml"/>
-        <StyleInclude Source="Forms/ProfileForm.axaml"/>
-        <StyleInclude Source="avares://IconPacks.Avalonia.BootstrapIcons/BootstrapIcons.axaml"/>
+        <semi:SemiTheme Locale="en-US" />
+        <u-semi:SemiTheme Locale="en-US"/>
+        
         <semi:DataGridSemiTheme />
+        
+        <StyleInclude Source="Controls/Profile.axaml"/>
     </Application.Styles>
              
      <Application.Resources>

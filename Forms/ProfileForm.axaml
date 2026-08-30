@@ -1,0 +1,26 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="430" d:DesignHeight="450"
+             xmlns:u="https://irihi.tech/ursa"
+             x:Class="Agenda.Forms.ProfileForm">
+    <Border Padding="12 10">
+        <Grid Width="400" RowDefinitions="*, Auto">
+            <StackPanel Grid.Row="0" Name="tt">
+                <TextBlock Name="TextBlockTitleNew" Text="New profile" IsVisible="True" Classes="H5" Theme="{StaticResource TitleTextBlock}" Margin="0 0 0 10"/>
+                <TextBlock Name="TextBlockTitleUpdate" Text="Update profile" IsVisible="False" Classes="H5" Theme="{StaticResource TitleTextBlock}" Margin="0 0 0 10"/>
+                
+                <u:Form Name="FormProfile" LabelPosition="Top" LabelWidth="*">
+                    <TextBox Name="TextBoxName" u:FormItem.Label="Name" u:FormItem.IsRequired="True"/>
+                    <ComboBox Name="ComboBoxType" SelectionChanged="ComboBoxType_OnSelectionChanged" Width="400" IsEnabled="True" u:FormItem.Label="Module" u:FormItem.IsRequired="True"/>
+                </u:Form>
+                <SelectableTextBlock Name="TextBlockDescription" TextWrapping="Wrap" Padding="0 10"/>
+                <u:Divider Name="Divider" Content="Fields"/>
+                <u:Form Name="FormDynamic" LabelPosition="Top" LabelWidth="*"/>
+            </StackPanel>
+            <Button Grid.Row="1" Name="ButtonAddProfile" IsVisible="True" Click="ButtonAddProfile_OnClick" HorizontalAlignment="Right" Content="Add profile" Theme="{StaticResource SolidButton}"/>
+            <Button Grid.Row="1" Name="ButtonUpdateProfile" IsVisible="False" Click="ButtonAddProfile_OnClick" HorizontalAlignment="Right" Content="Update profile" Theme="{StaticResource SolidButton}"/>
+        </Grid>
+    </Border>
+</UserControl>

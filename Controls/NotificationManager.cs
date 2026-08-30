@@ -1,6 +1,5 @@
 ﻿using System;
 using Avalonia.Controls.Notifications;
-using ExCSS;
 using Notification = Ursa.Controls.Notification;
 using WindowNotificationManager = Ursa.Controls.WindowNotificationManager;
 

@@ -12,9 +12,9 @@ public class PasswordFieldControl : BaseModelFieldControl
         this.Content = _textBox;
     }
     
-    public override object? GetValue() => string.IsNullOrWhiteSpace(this._textBox.Text) ? null : this._textBox.Text;
+    public override string? GetValue() => this._textBox.Text;
 
-    public override void SetValue(object value) => this._textBox.Text = (string)value;
+    public override void SetValue(string? value) => this._textBox.Text = value;
     
     public override Control GetControl() => this._textBox;
 }

@@ -1,0 +1,49 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:u="https://irihi.tech/ursa"
+        xmlns:controls="using:Agenda.Controls">
+    <Design.PreviewWith>
+        <controls:Profile />
+    </Design.PreviewWith>
+
+    <Style Selector="controls|Profile">
+        <!-- Set Defaults -->
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Border Width="280" Theme="{StaticResource CardBorder}" Padding="0 0 0 0" Height="285">
+                    
+                    <Grid RowDefinitions="Auto, *" >
+                        <Border Grid.Row="0" Height="4" Background="{TemplateBinding Color}" CornerRadius="10 10 0 0"/>
+                        <Border Grid.Row="1" Padding="16">
+                            <Grid RowDefinitions="Auto, Auto *, Auto Auto" RowSpacing="16">
+                                <Grid Grid.Row="0" RowDefinitions="Auto, Auto, Auto" ColumnDefinitions="Auto, Auto, *, Auto, Auto" ColumnSpacing="4" RowSpacing="4" ShowGridLines="False">
+                                    <SelectableTextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Text="{TemplateBinding Title}" FontSize="18" FontWeight="Bold"/>
+                                    <Label Grid.Row="1" Grid.Column="0" Classes="Ghost Grey" Theme="{StaticResource TagLabel}" Content="{TemplateBinding ModuleTitle}"/>
+                                    <u:MarkdownLine Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4" Markdown="{TemplateBinding Subtitle}" Padding="18 0"/>
+                                    <PathIcon Grid.Column="0" Grid.Row="2" Data="{StaticResource SemiIconTerminal}" Width="14" Height="14" HorizontalAlignment="Left"/>
+                                    
+                                    <u:IconButton Grid.Row="0" Grid.Column="3" Name="PART_IconButtonEdit" Icon="{StaticResource SemiIconEditStroked}" Classes="Tertiary" Theme="{DynamicResource BorderlessIconButton}"/>
+                                    <u:IconButton Grid.Row="0" Grid.Column="4" Name="PART_IconButtonDelete" Icon="{StaticResource SemiIconDeleteStroked}" Classes="Tertiary" Theme="{DynamicResource BorderlessIconButton}"/>
+                                </Grid>
+                                
+                                <u:Divider Grid.Row="1" Margin="-16"/>
+                            
+                                <u:Descriptions Grid.Row="2" Name="PART_DescriptionsFields" ItemAlignment="Justify"/>
+                            
+                                <u:Divider Grid.Row="3" Margin="-16"/>
+                                
+                                <Grid Grid.Row="4" ColumnDefinitions="*, Auto" ColumnSpacing="4">
+                                    <u:IconButton Grid.Column="0" Name="PART_IconButtonConnect" HorizontalAlignment="Stretch" Icon="{StaticResource SemiIconDesktop}" Content="Connect" Classes="Tertiary" Theme="{DynamicResource SolidIconButton}" />
+                                    <Button Grid.Column="1" Classes="Tertiary" Theme="{StaticResource OutlineButton}">
+                                        <PathIcon Theme="{DynamicResource InnerPathIcon}" Data="{StaticResource SemiIconMoreStroked}" RenderTransform="rotate(90deg)"/>
+                                    </Button>
+                                </Grid>
+                            </Grid>
+                        </Border>
+                    </Grid>
+                    
+                </Border>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+</Styles>

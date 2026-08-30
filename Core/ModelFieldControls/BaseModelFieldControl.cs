@@ -5,12 +5,12 @@ namespace Agenda.Core.ModelFieldControls;
 
 public abstract class BaseModelFieldControl : UserControl
 {
-    public virtual object? GetValue()
+    public virtual string? GetValue()
     {
         throw new NotImplementedException();
     }
 
-    public virtual void SetValue(object value)
+    public virtual void SetValue(string? value)
     {
         throw new NotImplementedException();
     }

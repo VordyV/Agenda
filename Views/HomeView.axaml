@@ -3,8 +3,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="700" d:DesignHeight="450"
-             xmlns:c="clr-namespace:Agenda.Forms"
+             xmlns:c="clr-namespace:Agenda.Controls"
+             xmlns:l="clr-namespace:Agenda.Views"
              xmlns:u="https://irihi.tech/ursa"
+             x:DataType="l:HomeView"
              x:Class="Agenda.Views.HomeView">
     <Grid RowDefinitions="Auto, *">
         <!-- HEADER -->
@@ -14,15 +16,13 @@
                 <Button Name="ButtonNewSession" Click="ButtonNewSession_OnClick" Content="New session" Theme="{StaticResource OutlineButton}">
                     <ToolTip.Tip>Creates a new session based on the user data entered in the form</ToolTip.Tip>
                 </Button>
-                <Button Name="AddNewProfile" Click="AddNewProfile_OnClick" Content="Add new profile" Theme="{StaticResource SolidButton}" IsEnabled="False"/>
+                <Button Name="AddNewProfile" Click="AddNewProfile_OnClick" Content="Add new profile" Theme="{StaticResource SolidButton}"/>
             </StackPanel>
             
         </Grid>
         
         <!-- BODY -->
-        <WrapPanel Grid.Row="1" Margin="26 0">
-            <c:ProfileForm NameProfile="1" NameModule="2" Image="/Media/Modules/tcpc.png" Time="12"/>
-        </WrapPanel>
-        
+        <WrapPanel Grid.Row="1" Name="WrapPanelProfiles" Margin="24" ItemSpacing="24"/>
+        <u:IconButton Grid.Row="1" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="12" Name="IconButtonRefresh" Click="IconButtonRefresh_OnClick" Icon="{StaticResource SemiIconRefresh}" Classes="Tertiary" Theme="{DynamicResource BorderlessIconButton}" />
     </Grid>
 </UserControl>

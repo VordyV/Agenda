@@ -7,8 +7,8 @@ namespace Agenda.Controls;
 
 public class ViewPresenter
 {
-    private Manager? _manager;
-    private Dictionary<string, Func<Manager, ViewPresenter, object?, UserControl>> _views;
+    private AgendaCore? _manager;
+    private Dictionary<string, Func<AgendaCore, ViewPresenter, object?, UserControl>> _views;
     private string? _defaultView;
     private string _view;
     private Dictionary<string, UserControl> _viewInstances;
@@ -19,7 +19,7 @@ public class ViewPresenter
     public string CurrentView => this._view;
 
 
-    public ViewPresenter(Manager? manager = null, Dictionary<string, Func<Manager, ViewPresenter, object?, UserControl>>? views = null, string? defaultView = null)
+    public ViewPresenter(AgendaCore? manager = null, Dictionary<string, Func<AgendaCore, ViewPresenter, object?, UserControl>>? views = null, string? defaultView = null)
     {
         this._manager = manager;
         this._viewInstances = new();
@@ -32,7 +32,7 @@ public class ViewPresenter
         else this._views = new();
     }
 
-    public void AddView(string name, Func<Manager, ViewPresenter, object?, UserControl> content)
+    public void AddView(string name, Func<AgendaCore, ViewPresenter, object?, UserControl> content)
     {
         if (this._views.ContainsKey(name)) throw new Exception($"View '{name}' already added");
         this._views.Add(name, content);

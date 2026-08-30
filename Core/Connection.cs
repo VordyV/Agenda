@@ -12,12 +12,12 @@ public class Connection
     public string ModuleId { get; private set; }
     public UserControl View { get; private set; }
     public BasicDriver? Driver { get; private set; }
-    public Dictionary<string, object?> Fields { get; private set; }
+    public Dictionary<string, string?> Fields { get; private set; }
     public event Action OnStart; 
     public event Action OnStop;
     public bool IsStarted { get; private set; } = false;
 
-    public Connection(string id, string moduleId, Dictionary<string, object?> fields)
+    public Connection(string id, string moduleId, Dictionary<string, string?> fields)
     {
         this.Id = id;
         this.ModuleId = moduleId;

@@ -1,53 +1,63 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using Agenda.Controls;
 using Agenda.Core;
-using Agenda.Core.ModelFieldControls;
-using Agenda.Forms.ConnectionIndicatorForms;
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Data;
-using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
-using Avalonia.Media;
-using Avalonia.Styling;
 using Irihi.Avalonia.Shared.Contracts;
 using Ursa.Controls;
+using Agenda.Core.ModelFieldControls;
+using Avalonia.Data;
+using Avalonia.Interactivity;
+using BLite.Bson;
 
 namespace Agenda.Forms;
 
-public partial class ConnectForm : Form
+public partial class ProfileForm : Form
 {
     private AgendaCore _agendaCore;
-    //private ViewPresenter _presenter;
     private Module _currentModule;
+    private ProfileModel? _profileModel;
+    private UserControl? _homeView;
     private Dictionary<string, Control> _fields = new();
     
-    public ConnectForm(AgendaCore agendaCore)
+    public ProfileForm(AgendaCore agendaCore, ProfileModel? profileModel = null, UserControl? homeView = null)
     {
         this._agendaCore = agendaCore;
-        //this._presenter = presenter;
+        this._profileModel = profileModel;
+        this._homeView = homeView;
+        
         InitializeComponent();
+        
+        this.TextBlockTitleNew.IsVisible = profileModel == null ? true : false;
+        this.TextBlockTitleUpdate.IsVisible = profileModel != null ? true : false;
+        this.ComboBoxType.IsEnabled = profileModel == null ? true : false;
+        this.TextBoxName.Text = profileModel == null ? "" : profileModel.Name;
+        this.ButtonAddProfile.IsVisible = profileModel == null ? true : false;
+        this.ButtonUpdateProfile.IsVisible = profileModel != null ? true : false;
         this.LoadModules();
     }
-
-    public ConnectForm()
+    
+    public ProfileForm()
     {
         InitializeComponent();
     }
-
+    
     private void LoadModules()
     {
         var modules = this._agendaCore.GetModules();
+        ushort i = 0;
+        ushort index = 0;
         
         foreach (var module in modules)
         {
+            if (this._profileModel != null && module.Id == this._profileModel.ModuleId) index = i;
             this.ComboBoxType.Items.Add(new ComboBoxItem() {Content = module.Title, Name = module.Id});
+            i++;
         }
-        this.ComboBoxType.SelectedIndex = 0;
+        this.ComboBoxType.SelectedIndex = this._profileModel != null ? index : 0;
 
-        this._currentModule = modules[0];
+        this._currentModule = modules[this._profileModel != null ? index : 0];
     }
 
     private void ComboBoxType_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
@@ -60,13 +70,15 @@ public partial class ConnectForm : Form
         this.FormDynamic.Items.Clear();
         this._fields.Clear();
         
+        //var i = this._profileModel.Fields;
         foreach (var field in this._currentModule.Fields)
         {
+            
             BaseModelFieldControl control = field.Value.Control.Invoke();
             control.Width = 400;
-            if (field.Value.Value is not null) control.SetValue(field.Value.Value);
-            var formItem = new FormItem()
-            { Content = control, Name = field.Key};
+            if (field.Value.Value is not null && this._profileModel == null) control.SetValue(field.Value.Value);
+            else if (this._profileModel != null) control.SetValue(this._profileModel?.Fields[field.Key]);
+            var formItem = new FormItem() { Content = control, Name = field.Key};
             FormItem.SetLabel(formItem, field.Value.Title);
             FormItem.SetIsRequired(formItem, field.Value.Required);
             
@@ -75,8 +87,15 @@ public partial class ConnectForm : Form
         }
     }
 
-    private async void Button_OnClick(object? sender, RoutedEventArgs e)
+    private async void ButtonAddProfile_OnClick(object? sender, RoutedEventArgs e)
     {
+        DataValidationErrors.ClearErrors(this.TextBoxName);
+        if (this.TextBoxName.Text == null || this.TextBoxName.Text.Trim() == "")
+        {
+            DataValidationErrors.SetError(this.TextBoxName, new DataValidationException("Name must not be empty"));
+            return;
+        }
+        
         bool isRun = true;
 
         Dictionary<string, string?> fields = new();
@@ -119,12 +138,23 @@ public partial class ConnectForm : Form
         }
 
         if (!isRun) return;
+
+        try
+        {
+            if (this._profileModel == null) await this._agendaCore.AddProfile(name: this.TextBoxName.Text, moduleId: this._currentModule.Id, fields: fields);
+            else
+            {
+                this._profileModel.Name = this.TextBoxName.Text;
+                this._profileModel.Fields = fields;
+                await this._agendaCore.UpdateProfile(this._profileModel);
+            }
+        }
+        catch (Exception exception)
+        {
+            DataValidationErrors.SetError(this.TextBoxName, new DataValidationException(exception.Message));
+            return;
+        }
         
-        var connId = this._agendaCore.CreateNewConnection(this._currentModule.Id, fields);
-
-        if (await this._agendaCore.InitConnection(connId) && DataContext is IDialogContext ctx)  ctx.Close();
-        //this._presenter.LoadView("server", connId);
-
-        //if (DataContext is IDialogContext ctx) ctx.Close();
+        if (DataContext is IDialogContext ctx)  ctx.Close();
     }
 }
