@@ -29,7 +29,7 @@ public partial class ConnectForm : Form
         this._agendaCore = agendaCore;
         //this._presenter = presenter;
         InitializeComponent();
-        this.LoadModules();
+        this.Loaded += (sender, args) => this.LoadModules();
     }
 
     public ConnectForm()
@@ -48,12 +48,26 @@ public partial class ConnectForm : Form
         this.ComboBoxType.SelectedIndex = 0;
 
         this._currentModule = modules[0];
+        this.SetTags(this._currentModule.Tags);
+    }
+    
+    private void SetTags(Tag[]? tags)
+    {
+        if (tags == null) return;
+        Label label;
+        this.WrapPanelTags.Children.Clear();
+        foreach (var tag in tags)
+        {
+            label = new Label() {Content = tag.Text, Classes = { "Ghost", tag.Color }, Theme = this.FindResource("TagLabel") as ControlTheme};
+            this.WrapPanelTags.Children.Add(label);
+        }
     }
 
     private void ComboBoxType_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
     {
         var item = (ComboBoxItem)this.ComboBoxType.SelectedItem;
         this._currentModule = this._agendaCore.GetModule(item.Name);
+        this.SetTags(this._currentModule.Tags);
 
         this.TextBlockDescription.Text = this._currentModule.Description;
         

@@ -43,9 +43,10 @@ public partial class HomeView : UserControl
         DialogManager.ShowOverlay(form: ctx => new ConnectForm(this._agendaCore) {DataContext = ctx});
     }
 
-    private void AddNewProfile_OnClick(object? sender, RoutedEventArgs e)
+    private async void AddNewProfile_OnClick(object? sender, RoutedEventArgs e)
     {
-        DialogManager.ShowOverlay(form: ctx => new ProfileForm(this._agendaCore) {DataContext = ctx});
+        await DialogManager.ShowOverlayModal(form: ctx => new ProfileForm(this._agendaCore) {DataContext = ctx});
+        await this.LoadProfileList();
     }
 
     public async Task LoadProfileList()
@@ -60,12 +61,15 @@ public partial class HomeView : UserControl
             item = new Profile() {Title = profile.Name, ObjectId = profile.Id, Subtitle = module.GetSubtitle(profile.Fields), ModuleTitle = module.Title};
             fields = this.GenPreviewFields(module.NumberPreviewFields);
             item.Fields = fields;
+            item.Tags = module.Tags;
             item.ClickDelete += this.RemoveProfile_OnClick;
             item.ClickEdit += this.EditProfile_OnClick;
             item.ClickConnect += this.ConnectProfile_OnClick;
             item.Loaded += this.LoadedProfile_OnClick;
             this.WrapPanelProfiles.Children.Add(item);
         }
+
+        this.TextBlockCount.Text = this.WrapPanelProfiles.Children.Count.ToString();
     }
 
     public PreviewField[] GenPreviewFields(byte number)

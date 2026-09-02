@@ -17,8 +17,9 @@ public class Module
     public string SubtitleFormat { get; private set; }
     public bool Preview { get; private set; }
     public byte NumberPreviewFields { get; private set; }
+    public Tag[] Tags { get; private set; }
 
-    public Module(string id, string title, string version, string description, Func<Connection, BasicView> view, List<ModuleField> fields, Type driver, string subtitleFormat, bool preview, byte numberPreviewFields)
+    public Module(string id, string title, string version, string description, Func<Connection, BasicView> view, List<ModuleField> fields, Type driver, string subtitleFormat, bool preview, byte numberPreviewFields, Tag[] tags)
     {
         this.Id = id;
         this.Title = title;
@@ -30,6 +31,7 @@ public class Module
         this.SubtitleFormat = subtitleFormat;
         this.Preview = preview;
         this.NumberPreviewFields = numberPreviewFields;
+        this.Tags = tags;
     }
 
     private Dictionary<string, ModuleField> _getDictModuleFields(List<ModuleField> moduleFields)

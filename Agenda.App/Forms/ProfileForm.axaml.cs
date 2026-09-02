@@ -9,6 +9,7 @@ using Ursa.Controls;
 using Agenda.Core.ModelFieldControls;
 using Avalonia.Data;
 using Avalonia.Interactivity;
+using Avalonia.Styling;
 using BLite.Bson;
 
 namespace Agenda.Forms;
@@ -35,12 +36,25 @@ public partial class ProfileForm : Form
         this.TextBoxName.Text = profileModel == null ? "" : profileModel.Name;
         this.ButtonAddProfile.IsVisible = profileModel == null ? true : false;
         this.ButtonUpdateProfile.IsVisible = profileModel != null ? true : false;
-        this.LoadModules();
+        
+        this.Loaded += (sender, args) => this.LoadModules();
     }
     
     public ProfileForm()
     {
         InitializeComponent();
+    }
+    
+    private void SetTags(Tag[]? tags)
+    {
+        if (tags == null) return;
+        Label label;
+        this.WrapPanelTags.Children.Clear();
+        foreach (var tag in tags)
+        {
+            label = new Label() {Content = tag.Text, Classes = { "Ghost", tag.Color }, Theme = this.FindResource("TagLabel") as ControlTheme};
+            this.WrapPanelTags.Children.Add(label);
+        }
     }
     
     private void LoadModules()
@@ -58,12 +72,14 @@ public partial class ProfileForm : Form
         this.ComboBoxType.SelectedIndex = this._profileModel != null ? index : 0;
 
         this._currentModule = modules[this._profileModel != null ? index : 0];
+        this.SetTags(this._currentModule.Tags);
     }
 
     private void ComboBoxType_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
     {
         var item = (ComboBoxItem)this.ComboBoxType.SelectedItem;
         this._currentModule = this._agendaCore.GetModule(item.Name);
+        this.SetTags(this._currentModule.Tags);
 
         this.TextBlockDescription.Text = this._currentModule.Description;
         

@@ -18,7 +18,7 @@
                 <MenuItem Name="MenuItemCloseActive" Header="Close active" Click="MenuItemCloseActive_OnClick" IsEnabled="False"/>
             </MenuItem>
             <MenuItem Header="Help">
-                <MenuItem Name="MenuItemWebsite" Header="Website" Click="MenuItemWebsite_OnClick"/>
+                <MenuItem Name="MenuItemWebsite" Header="GitHub" Click="MenuItemWebsite_OnClick"/>
                 <MenuItem Name="MenuItemReportBug" Header="Report a bug" Click="MenuItemReportBug_OnClick"/>
                 <MenuItem Name="MenuItemCheckUpdates" Header="Check for Updates" IsEnabled="False"/>
                 <MenuItem Name="MenuItemAbout" Header="About" Click="MenuItemAbout_OnClick"/>

@@ -20,6 +20,7 @@ public class Main
         driver: typeof(SimpleModuleDriver),
         subtitleFormat: "{address}:**{query_port}**",
         preview: true,
-        numberPreviewFields: 1
+        numberPreviewFields: 1,
+        tags: new Tag[]{}
     );
 }

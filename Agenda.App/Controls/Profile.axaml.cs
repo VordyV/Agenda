@@ -17,15 +17,18 @@ namespace Agenda.Controls;
 [TemplatePart("PART_IconButtonEdit", typeof(IconButton))]
 [TemplatePart("PART_IconButtonDelete", typeof(IconButton))]
 [TemplatePart("PART_IconButtonConnect", typeof(IconButton))]
+[TemplatePart("PART_WrapPanelTags", typeof(WrapPanel))]
 public class Profile : TemplatedControl
 {
     private Descriptions? _descriptionsFields;
     private IconButton? _iconButtonEdit;
     private IconButton? _iconButtonDelete;
     private IconButton? _iconButtonConnect;
+    private WrapPanel? _WrapPanelTags;
 
     public ObjectId ObjectId { get; set; }
     public PreviewField[] Fields { get; set; }
+    public Tag[] Tags { get; set; }
     
     // Property Name
     public static readonly StyledProperty<string> TitleProperty = AvaloniaProperty.Register<Profile, string>(nameof(Title), defaultValue: "Name");
@@ -67,18 +70,31 @@ public class Profile : TemplatedControl
         this._iconButtonEdit = e.NameScope.Get<IconButton>("PART_IconButtonEdit");
         this._iconButtonDelete = e.NameScope.Get<IconButton>("PART_IconButtonDelete");
         this._iconButtonConnect = e.NameScope.Get<IconButton>("PART_IconButtonConnect");
+        this._WrapPanelTags = e.NameScope.Get<WrapPanel>("PART_WrapPanelTags");
         
         this._iconButtonEdit.Click += OnClickIconButtonEdit;
         this._iconButtonDelete.Click += OnClickIconButtonDelete;
         this._iconButtonConnect.Click += this.OnClickIconButtonConnect;
         
         this.SetFields(Fields);
+        this.SetTags(Tags);
     }
 
     private void OnClickIconButtonEdit(object? sender, RoutedEventArgs e) => RaiseEvent(new RoutedEventArgs(this.ClickEditEvent));
     private void OnClickIconButtonDelete(object? sender, RoutedEventArgs e) => RaiseEvent(new RoutedEventArgs(this.ClickDeleteEvent));
     private void OnClickIconButtonConnect(object? sender, RoutedEventArgs e) => RaiseEvent(new RoutedEventArgs(this.ClickConnectEvent));
 
+    public void SetTags(Tag[]? tags)
+    {
+        if (this._WrapPanelTags == null || tags == null) return;
+        Label label;
+        foreach (var tag in tags)
+        {
+            label = new Label() {Content = tag.Text, Classes = { "Ghost", tag.Color }, Theme = this.FindResource("TagLabel") as ControlTheme};
+            this._WrapPanelTags.Children.Add(label);
+        }
+    }
+    
     public void SetFields(PreviewField[]? previewFields)
     {
         if (this._descriptionsFields == null || previewFields == null) return;

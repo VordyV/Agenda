@@ -4,9 +4,47 @@
               xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
               mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="450"
               xmlns:md="clr-namespace:LiveMarkdown.Avalonia;assembly=LiveMarkdown.Avalonia"
+              xmlns:u="https://irihi.tech/ursa"
               x:Class="Agenda.Forms.AboutForm">
-    <Border Padding="10 12" Width="350" Height="400">
-        <md:MarkdownRenderer Name="MarkdownContent"/>
+    <Border Padding="10 12" Width="400">
+        <StackPanel Spacing="12">
+            <Grid RowDefinitions="Auto, Auto" ColumnDefinitions="Auto, *" RowSpacing="12" ColumnSpacing="12">
+                <Image Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" Source="/Media/Logo/logo1024.png" Height="64" Width="64"/>
+                <TextBlock Grid.Column="1" Grid.Row="0" VerticalAlignment="Bottom" Classes="H3" Theme="{StaticResource TitleTextBlock}">Agenda</TextBlock>
+                <TextBlock Grid.Column="1" Grid.Row="1" VerticalAlignment="Top" TextWrapping="Wrap">Development, analysis, and management</TextBlock>
+            </Grid>
+            
+            <Grid ColumnDefinitions="Auto">
+                <Label Name="LabelVersion" Classes="Ghost Grey" Theme="{StaticResource TagLabel}"/>
+            </Grid>
+            
+            <Border Theme="{StaticResource CardBorder}" Margin="0">
+                <StackPanel Spacing="12">
+                    <TextBlock FontWeight="Bold">About the program</TextBlock>
+                    <u:MarkdownLine Name="TextBlockAbout" TextWrapping="Wrap"/>
+                </StackPanel>
+            </Border>
+            
+            <u:Descriptions Orientation="Horizontal" LabelPosition="Top">
+                <u:DescriptionsItem Label="Author">
+                    <TextBlock Name="TextBlockAuthor" FontSize="14"/>
+                </u:DescriptionsItem>
+                <u:DescriptionsItem Label="Release year">
+                    <TextBlock Name="TextBlockReleaseYear" FontSize="14"/>
+                </u:DescriptionsItem>
+                <u:DescriptionsItem Label="License">
+                    <TextBlock Name="TextBlockLicense" FontSize="14"/>
+                </u:DescriptionsItem>
+            </u:Descriptions>
+            
+            <u:Divider/>
+            
+            <StackPanel Orientation="Horizontal" Spacing="4">
+                <u:IconButton Name="IconButtonGitHub" Click="IconButtonGitHub_OnClick" Icon="{StaticResource SemiIconGithubLogo}" HorizontalAlignment="Left" Classes="Tertiary" Theme="{DynamicResource BorderlessIconButton}" Content="GitHub"/>
+                <u:IconButton Name="IconButtonReportBug" Click="IconButtonReportBug_OnClick" Icon="{StaticResource SemiIconIssueStroked}" HorizontalAlignment="Left" Classes="Tertiary" Theme="{DynamicResource BorderlessIconButton}" Content="Report a bug"/>
+            </StackPanel>
+
+        </StackPanel>
     </Border>
     
 </UserControl>

@@ -15,12 +15,16 @@
                     <TextBox Name="TextBoxName" u:FormItem.Label="Name" u:FormItem.IsRequired="True"/>
                     <ComboBox Name="ComboBoxType" SelectionChanged="ComboBoxType_OnSelectionChanged" Width="400" IsEnabled="True" u:FormItem.Label="Module" u:FormItem.IsRequired="True"/>
                 </u:Form>
+                <StackPanel Spacing="4" Orientation="Horizontal">
+                    <TextBlock Text="Tags: "/>
+                    <WrapPanel Name="WrapPanelTags" ItemSpacing="4" LineSpacing="4"/>
+                </StackPanel>
                 <SelectableTextBlock Name="TextBlockDescription" TextWrapping="Wrap" Padding="0 10"/>
                 <u:Divider Name="Divider" Content="Fields"/>
                 <u:Form Name="FormDynamic" LabelPosition="Top" LabelWidth="*"/>
             </StackPanel>
-            <Button Grid.Row="1" Name="ButtonAddProfile" IsVisible="True" Click="ButtonAddProfile_OnClick" HorizontalAlignment="Right" Content="Add profile" Theme="{StaticResource SolidButton}"/>
-            <Button Grid.Row="1" Name="ButtonUpdateProfile" IsVisible="False" Click="ButtonAddProfile_OnClick" HorizontalAlignment="Right" Content="Update profile" Theme="{StaticResource SolidButton}"/>
+            <Button Grid.Row="1" Name="ButtonAddProfile" IsVisible="True" Click="ButtonAddProfile_OnClick" Classes="Tertiary" HorizontalAlignment="Right" Content="Add profile" Theme="{StaticResource SolidButton}"/>
+            <Button Grid.Row="1" Name="ButtonUpdateProfile" IsVisible="False" Click="ButtonAddProfile_OnClick" Classes="Tertiary" HorizontalAlignment="Right" Content="Update profile" Theme="{StaticResource SolidButton}"/>
         </Grid>
     </Border>
 </UserControl>

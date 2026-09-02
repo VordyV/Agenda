@@ -79,7 +79,7 @@ public class AgendaCore
         {
             await Task.Run(() =>
             {
-                this.LoadPlugins();
+                //this.LoadPlugins();
                 
                 string dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "agenda");
                 if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
@@ -120,6 +120,7 @@ public class AgendaCore
             }
             catch (Exception e)
             {
+                // TODO: instead of output, make an OnPluginLoadError event
                 Console.WriteLine(e);
             }
         }
@@ -257,10 +258,12 @@ public class AgendaCore
         }
         catch (OperationCanceledException e)
         {
+            Debug.WriteLine($"{conn.Id}: connection process has been canceled");
             this.SetState(conn, new DriverState() {Type = TypeDriverState.Cancelled, ErrorDetail = e.Message});
         }
         catch (Exception e)
         {
+            Debug.WriteLine($"{conn.Id}: error in the connection loop in the OnLoop method: {e.Message}\n{e.StackTrace}");
             this.SetState(conn, new DriverState() { Type = TypeDriverState.Error, ErrorDetail = e.Message });
         }
         
@@ -270,7 +273,7 @@ public class AgendaCore
         }
         catch (Exception e)
         {
-            Debug.WriteLine($"ERR {e.Message}");
+            Debug.WriteLine($"{conn.Id}: error in the connection loop in the OnStop method: {e.Message}\n{e.StackTrace}");
         }
         
         //conn.ViewModel.Detach();
@@ -343,6 +346,7 @@ public class AgendaCore
         }
         catch (Exception e)
         {
+            Debug.WriteLine($"{conn.Id}: error in the OnPreview method: {e.Message}\n{e.StackTrace}");
             preview = await driver.OnPreviewError();
         }
 
@@ -358,11 +362,11 @@ public class AgendaCore
         Connection? connection;
         if (!this._previewConnections.TryGetValue(objectId.ToString(), out connection)) return;
         connection.Driver?.Cancel();
-        await Task.Run(() =>
+        await Task.Run(async () =>
         {
             while (this._previewConnections.ContainsKey(objectId.ToString()))
             {
-                
+                await Task.Delay(10);
             }
         }).WaitAsync(timeout);
     }

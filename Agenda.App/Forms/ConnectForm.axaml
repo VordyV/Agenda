@@ -13,11 +13,15 @@
                 <u:Form Name="FormProfile" LabelPosition="Top" LabelWidth="*">
                     <ComboBox Name="ComboBoxType" SelectionChanged="ComboBoxType_OnSelectionChanged" Width="400" u:FormItem.Label="Module" u:FormItem.IsRequired="True"/>
                 </u:Form>
+                <StackPanel Spacing="4" Orientation="Horizontal">
+                    <TextBlock Text="Tags: "/>
+                    <WrapPanel Name="WrapPanelTags" ItemSpacing="4" LineSpacing="4"/>
+                </StackPanel>
                 <SelectableTextBlock Name="TextBlockDescription" TextWrapping="Wrap" Padding="0 10"/>
                 <u:Divider Name="Divider" Content="Fields"/>
                 <u:Form Name="FormDynamic" LabelPosition="Top" LabelWidth="*"/>
             </StackPanel>
-            <Button Grid.Row="1" Click="Button_OnClick" HorizontalAlignment="Right" Content="Connect" Theme="{StaticResource SolidButton}"/>
+            <Button Grid.Row="1" Click="Button_OnClick" HorizontalAlignment="Right" Classes="Tertiary" Content="Connect" Theme="{StaticResource SolidButton}"/>
         </Grid>
     </Border>
 </UserControl>

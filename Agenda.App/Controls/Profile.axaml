@@ -18,7 +18,9 @@
                             <Grid RowDefinitions="Auto, Auto *, Auto Auto" RowSpacing="16">
                                 <Grid Grid.Row="0" RowDefinitions="Auto, Auto, Auto" ColumnDefinitions="Auto, Auto, *, Auto, Auto" ColumnSpacing="4" RowSpacing="4" ShowGridLines="False">
                                     <SelectableTextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Text="{TemplateBinding Title}" FontSize="18" FontWeight="Bold"/>
-                                    <Label Grid.Row="1" Grid.Column="0" Classes="Ghost Grey" Theme="{StaticResource TagLabel}" Content="{TemplateBinding ModuleTitle}"/>
+                                    <WrapPanel Name="PART_WrapPanelTags" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="5" ItemSpacing="4" LineSpacing="4">
+                                        <Label Classes="Ghost Grey" Theme="{StaticResource TagLabel}" Content="{TemplateBinding ModuleTitle}"/>
+                                    </WrapPanel>
                                     <u:MarkdownLine Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="4" Markdown="{TemplateBinding Subtitle}" Padding="18 0"/>
                                     <PathIcon Grid.Column="0" Grid.Row="2" Data="{StaticResource SemiIconTerminal}" Width="14" Height="14" HorizontalAlignment="Left"/>
                                     

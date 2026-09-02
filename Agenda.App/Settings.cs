@@ -30,7 +30,8 @@ public static class Settings
             driver: typeof(SimpleModule.SimpleDriver),
             subtitleFormat: "{address}:**{query_port}**",
             preview: true,
-            numberPreviewFields: 1
+            numberPreviewFields: 1,
+            tags: new Tag[]{}
         ),
         new Module(
             id: "tcpc",
@@ -46,11 +47,12 @@ public static class Settings
             driver: typeof(TCPCDriver),
             subtitleFormat: "",
             preview: false,
-            numberPreviewFields: 1
+            numberPreviewFields: 1,
+            tags: new Tag[]{}
         ),
         new Module(
             id: "rconbf2142as",
-            title: "RCON BF2142 (MM)",
+            title: "Rcon BF2142",
             version: "0.1",
             description: "A client for remote control of a Battlefield 2142 game server via the RCON protocol, protocol module - 'ModManager'",
             view: (conn) => new RconBF2142DefaultModule.RconBf2142DefaultView(conn),
@@ -63,25 +65,20 @@ public static class Settings
             driver: typeof(RconBF2142DefaultModule.RconBf2142DefaultDriver),
             subtitleFormat: "{address}:**{rcon_port}**",
             preview: true,
-            numberPreviewFields: 2
+            numberPreviewFields: 2,
+            tags: new []{new Tag() {Color = "Purple", Text = "ModManager"}}
         )
     };
     
     public static string GithubUrl = "https://github.com/VordyV/Agenda";
     public static string BugReportUrl = "https://github.com/VordyV/Agenda/issues/new";
 
-    public static string TextAbout = $"""
-                                     ## Agenda v{Assembly.GetExecutingAssembly().GetName().Version}
+    public static string Author = "Vladislav Netievsky aka VordyV";
+    public static string ReleaseYear = "2026";
+    public static string License = "MIT";
 
-                                     **Developed by a human:** Vladislav Netievsky aka VordyV
-                                     **Github:** {Settings.GithubUrl}
-                                     
-                                     To report errors and suggest improvements, please use the project's issue tracker on GitHub.
-                                     
-                                     #### Licensing
-                                     Used third-party libraries are distributed in accordance with their licenses.
-                                     
-                                     Powered by Vorklab.space
+    public static string TextAbout = $"""
+                                     Agenda is a desktop utility. It is a simple tool to assist in development, modding, and administration of game servers, primarily for Battlefield 2 and Battlefield 2142 servers.
                                      """;
     
     public static string PluginEntryPoint = "Manifest.Main";
