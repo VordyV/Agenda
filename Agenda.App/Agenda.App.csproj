@@ -13,6 +13,7 @@
         <Title>Agenda</Title>
         <RepositoryUrl>https://github.com/VordyV/Agenda</RepositoryUrl>
         <Company>Vorklab</Company>
+        <ApplicationIcon>logo.ico</ApplicationIcon>
     </PropertyGroup>
 
     <ItemGroup>
@@ -34,6 +35,7 @@
       <PackageReference Include="rconnet.dotnet" Version="1.1.1" />
       <PackageReference Include="Semi.Avalonia" Version="12.1.0.1" />
       <PackageReference Include="Semi.Avalonia.DataGrid" Version="12.1.0" />
+      <PackageReference Include="Velopack" Version="1.2.0" />
       <PackageReference Include="ZeroAlloc.AsyncEvents" Version="1.1.2" />
     </ItemGroup>
 

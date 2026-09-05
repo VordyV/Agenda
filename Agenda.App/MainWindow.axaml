@@ -9,7 +9,7 @@
     <Grid RowDefinitions="Auto, *">
         <Menu Grid.Row="0">
             <MenuItem Header="_Profile">
-                <MenuItem Name="MenuItemNew" Header="New" IsEnabled="False"/>
+                <MenuItem Name="MenuItemNew" Header="New" Click="MenuItemNew_OnClick" IsEnabled="True"/>
                 <MenuItem Name="MenuItemOpen" Header="Open" Click="MenuItemOpen_OnClick"/>
             </MenuItem>
             <MenuItem Header="_Session">

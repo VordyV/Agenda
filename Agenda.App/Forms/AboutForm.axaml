@@ -9,7 +9,7 @@
     <Border Padding="10 12" Width="400">
         <StackPanel Spacing="12">
             <Grid RowDefinitions="Auto, Auto" ColumnDefinitions="Auto, *" RowSpacing="12" ColumnSpacing="12">
-                <Image Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" Source="/Media/Logo/logo1024.png" Height="64" Width="64"/>
+                <Image Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" Source="/Media/Logo/logo128.png" Height="64" Width="64"/>
                 <TextBlock Grid.Column="1" Grid.Row="0" VerticalAlignment="Bottom" Classes="H3" Theme="{StaticResource TitleTextBlock}">Agenda</TextBlock>
                 <TextBlock Grid.Column="1" Grid.Row="1" VerticalAlignment="Top" TextWrapping="Wrap">Development, analysis, and management</TextBlock>
             </Grid>

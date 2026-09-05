@@ -83,4 +83,7 @@ public static class Settings
     
     public static string PluginEntryPoint = "Manifest.Main";
     public static string PluginsDir = "plugins";
+
+    public static string UpdaterGitHubRep = "https://github.com/VordyV/Agenda";
+    public static bool UpdaterPrerelease = true;
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Reflection;
 using System.Threading.Tasks;
 using Agenda.Controls;
@@ -121,12 +122,12 @@ public partial class HomeView : UserControl
         {
             this.ShowPreviewLoading(profile);
             Preview preview = await this._agendaCore.RequestPreviewData(profile.ObjectId, TimeSpan.FromMilliseconds(3000));
-            profile.SetFields(preview.Fields);
             profile.Color = new SolidColorBrush(Color.Parse(preview.Color));
+            profile.SetFields(preview.Fields);
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
+            Debug.WriteLine($"[pid{profile.ObjectId}] error updating preview data: {e.Message}\n{e.StackTrace}");
         }
         finally
         {

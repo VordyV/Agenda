@@ -14,6 +14,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.Notifications;
 using Avalonia.Interactivity;
 using Ursa.Controls;
+using Velopack;
 using WindowNotificationManager = Ursa.Controls.WindowNotificationManager;
 using Notification = Ursa.Controls.Notification;
 
@@ -65,6 +66,20 @@ public partial class MainWindow : Window
 
     private async Task _onLoaded(object? sender, RoutedEventArgs args)
     {
+        Updater updater = new Updater(Settings.UpdaterGitHubRep, Settings.UpdaterPrerelease);
+        try
+        {
+            UpdateInfo? updateInfo = await updater.CheckUpdate();
+            //if (updateInfo != null) await updater.Update(updateInfo);
+        }
+        catch (Velopack.Exceptions.NotInstalledException)
+        {
+
+        }
+        catch (Exception e)
+        {
+            Debug.WriteLine($"Failed to check for and install the update: {e.Message}");
+        }
         await this._agendaCore.Init();
     }
 
@@ -182,5 +197,15 @@ public partial class MainWindow : Window
     private void MenuItemReportBug_OnClick(object? sender, RoutedEventArgs e)
     {
         TopLevel.GetTopLevel(this)?.Launcher.LaunchUriAsync(new Uri(Settings.BugReportUrl));
+    }
+
+    private async void MenuItemNew_OnClick(object? sender, RoutedEventArgs e)
+    {
+        await DialogManager.ShowOverlayModal(form: ctx => new ProfileForm(this._agendaCore) {DataContext = ctx});
+        if (this._viewPresenter.CurrentView == "home")
+        {
+            HomeView view = (HomeView)this._viewPresenter.Content;
+            await view.LoadProfileList();
+        }
     }
 }
