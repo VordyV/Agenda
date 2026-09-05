@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="https://github.com/VordyV/Agenda/blob/master/Media/logo1024.png?raw=true" height="150">
+    <img src="https://github.com/VordyV/Agenda/blob/master/Media/logo128.png?raw=true" height="128">
 </p>
 
 <p align="center">
