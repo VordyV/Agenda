@@ -1,0 +1,30 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="450" d:DesignHeight="350"
+        Height="350" Width="450"
+        WindowDecorations="None"
+        WindowStartupLocation="CenterScreen"
+        x:Class="Agenda.SplashScreen"
+        Title="SplashScreen">
+    
+    <Border>
+        <Border.Background>
+            <RadialGradientBrush GradientOrigin="50%,50%" Center="50%,50%" RadiusX="80%" RadiusY="80%">
+                <GradientStop Color="#121212" Offset="0.0"/>
+                <GradientStop Color="#030303" Offset="1.0"/>
+            </RadialGradientBrush>
+        </Border.Background>
+        
+        <Grid RowDefinitions="Auto, Auto, Auto, Auto, Auto, Auto" VerticalAlignment="Center" RowSpacing="12" Margin="24 0">
+            <Image Grid.Row="0" Source="Media/Logo/splashscreen128.png" Height="64"/>
+            <TextBlock Grid.Row="1" Text="Agenda" TextAlignment="Center" FontSize="28" FontWeight="Bold" Foreground="#E6E6E6"/>
+            <TextBlock Grid.Row="2" Text="Modding Administration Development" TextAlignment="Center" FontWeight="DemiBold" FontSize="14" Foreground="#7E7E7E"/>
+            <TextBlock Grid.Row="3" Name="TextBlockVersion" Text="Version {version}" TextAlignment="Center" FontWeight="DemiBold" FontSize="14" Foreground="#7E7E7E"/>
+            <ProgressBar Grid.Row="4" Name="ProgressBarStatus" IsIndeterminate="False" Maximum="100" Height="4" Minimum="0" Orientation="Horizontal" ShowProgressText="False" Value="0"/>
+            <TextBlock Grid.Row="5" Name="TextBlockStatus" Text="Agenda" TextAlignment="Center" FontSize="16" Foreground="#7E7E7E"/>
+        </Grid>
+    </Border>
+
+</Window>

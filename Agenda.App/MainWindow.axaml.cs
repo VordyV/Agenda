@@ -60,27 +60,6 @@ public partial class MainWindow : Window
         this._agendaCore.OnStopConn += this.OnStopConn;
         this._agendaCore.OnChangeStatusConn += this.OnChangeStatusConn;
         this._agendaCore.OnError += this.OnError;
-        
-        this.Loaded += async (sender, args) => await this._onLoaded(sender, args);
-    }
-
-    private async Task _onLoaded(object? sender, RoutedEventArgs args)
-    {
-        Updater updater = new Updater(Settings.UpdaterGitHubRep, Settings.UpdaterPrerelease);
-        try
-        {
-            UpdateInfo? updateInfo = await updater.CheckUpdate();
-            //if (updateInfo != null) await updater.Update(updateInfo);
-        }
-        catch (Velopack.Exceptions.NotInstalledException)
-        {
-
-        }
-        catch (Exception e)
-        {
-            Debug.WriteLine($"Failed to check for and install the update: {e.Message}");
-        }
-        await this._agendaCore.Init();
     }
 
     private async ValueTask OnError(ErrorEventArgs eventArgs, CancellationToken token)
