@@ -1,0 +1,98 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             xmlns:u="https://irihi.tech/ursa"
+             xmlns:avaloniaHex="clr-namespace:AvaloniaHex;assembly=AvaloniaHex"
+             xmlns:rendering="clr-namespace:AvaloniaHex.Rendering;assembly=AvaloniaHex"
+             xmlns:l="clr-namespace:Agenda.Modules.QueryGS3Module"
+             x:DataType="l:QueryGS3View"
+             x:Class="Agenda.Modules.QueryGS3Module.QueryGS3View">
+    <Grid RowDefinitions="Auto, Auto, *">
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="12" Spacing="32">
+            
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <PathIcon Data="{StaticResource SemiIconMonitorStroked}" Width="24"/>
+                <TextBlock Name="TextBlockServerName" Text="???" FontWeight="Bold" FontSize="18"/>
+            </StackPanel>
+            
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <PathIcon Data="{StaticResource SemiIconImageStroked}" Width="14" Height="14" VerticalAlignment="Center"/>
+                <TextBlock Text="Map:" FontSize="14" VerticalAlignment="Center"/>
+                <TextBlock Name="TextBlockMap" Text="???" FontWeight="Bold" FontSize="14" VerticalAlignment="Center"/>
+            </StackPanel>
+            
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <PathIcon Data="{StaticResource SemiIconFlagStroked}" Width="14" Height="14" VerticalAlignment="Center"/>
+                <TextBlock Text="Mod:" FontSize="14" VerticalAlignment="Center"/>
+                <TextBlock Name="TextBlockMod" Text="???" FontWeight="Bold" FontSize="14" VerticalAlignment="Center"/>
+            </StackPanel>
+            
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <PathIcon Data="{StaticResource SemiIconUserStroked}" Width="14" Height="14" VerticalAlignment="Center"/>
+                <TextBlock Text="Players:" FontSize="14" VerticalAlignment="Center"/>
+                <TextBlock Name="TextBlockServerPlayers" Text="???" FontWeight="Bold" FontSize="14" VerticalAlignment="Center"/>
+            </StackPanel>
+            
+        </StackPanel>
+        
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="12 0" Spacing="24">
+            <Label Name="LabelStatus" Classes="Solid Red" Theme="{StaticResource TagLabel}">Offline</Label>
+            
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <TextBlock Text="Ping:" FontSize="14" VerticalAlignment="Center"/>
+                <TextBlock Name="TextBlockPing" Text="0 ms" FontWeight="Bold" FontSize="14" VerticalAlignment="Center"/>
+            </StackPanel>
+            
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <TextBlock Text="Delay:" FontSize="14" VerticalAlignment="Center"/>
+                <TextBlock Name="TextBlockDelay" Text="0 ms" FontWeight="Bold" FontSize="14" VerticalAlignment="Center"/>
+            </StackPanel>
+        </StackPanel>
+        
+        <TabbedPage Grid.Row="2" TabPlacement="Top">
+            <ContentPage Icon="{DynamicResource SemiIconServer}" Header="About the server">
+                
+                <ScrollViewer Margin="0 12">
+                    <u:Descriptions Name="DescriptionsParams"/>
+                </ScrollViewer>
+                
+            </ContentPage>
+            <ContentPage Icon="{DynamicResource SemiIconUserList}" Header="Players">
+                
+                <Grid RowDefinitions="Auto, *">
+                    <TextBlock Text="Total players: {number}" Padding="12"/>
+                    <TableView Grid.Row="1" Name="TableViewPlayers" ItemsSource="{Binding Players}">
+                        <TableView.Columns>
+                            <TableViewColumn Header="№" Binding="{Binding Id}"/>
+                            <TableViewColumn Header="PID" Binding="{Binding PID}"/>
+                            <TableViewColumn Header="Nick" Binding="{Binding Nick}"/>
+                            <TableViewColumn Header="Scope" Binding="{Binding Scope}"/>
+                            <TableViewColumn Header="Skill" Binding="{Binding Skill}"/>
+                            <TableViewColumn Header="Deaths" Binding="{Binding Deaths}"/>
+                            <TableViewColumn Header="Team" Binding="{Binding Team}"/>
+                            <TableViewColumn Header="Ping" Binding="{Binding Ping}"/>
+                        </TableView.Columns>
+                    </TableView>
+                </Grid>
+                
+            </ContentPage>
+            <ContentPage Icon="{DynamicResource SemiIconBrackets}" Header="Raw data">
+                
+                <ScrollViewer HorizontalAlignment="Left">
+                    <avaloniaHex:HexEditor Name="HexEditorRawData" Width="900" HorizontalAlignment="Left" FontFamily="Cascadia Code,JetBrains Mono,Monospace,monospace">
+                        <avaloniaHex:HexEditor.Columns>
+                            <rendering:OffsetColumn />
+                            <rendering:HexColumn />
+                            <rendering:AsciiColumn />
+                        </avaloniaHex:HexEditor.Columns>
+                    </avaloniaHex:HexEditor>
+                </ScrollViewer>
+
+                
+                
+            </ContentPage>
+        </TabbedPage>
+    </Grid>
+</UserControl>
