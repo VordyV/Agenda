@@ -9,6 +9,7 @@ using Avalonia.Controls;
 using Module = Agenda.Core.Module;
 using SimpleModule = Agenda.Modules.SimpleModule;
 using RconBF2142DefaultModule = Agenda.Modules.RconBF2142DefaultModule;
+using QueryGS3Module = Agenda.Modules.QueryGS3Module;
 
 namespace Agenda;
 
@@ -67,6 +68,23 @@ public static class Settings
             preview: true,
             numberPreviewFields: 2,
             tags: new []{new Tag() {Color = "Purple", Text = "ModManager"}}
+        ),
+        new Module(
+            id: "querygs3",
+            title: "Query GameSpy3",
+            version: "0.1",
+            description: "Retrieving and displaying public information about a game server via the query port",
+            view: (conn) => new QueryGS3Module.QueryGS3View(conn),
+            fields: 
+            [
+                new ModuleField(id: "address", title: "Address", control: () => new IPv4FieldControl(), required: true, validator: (data) => new ModuleFieldValidator(length: 15).Validate(data), value: "127.0.0.1"),
+                new ModuleField(id: "query_port", title: "Query port", control: () => new IntFieldControl(min: 1.0m, max: 65535.0m), required: true, validator: (data) => new ModuleFieldValidator(maxNum: 65535, minNum: 1).Validate(data), value: "29900"),
+            ],
+            driver: typeof(QueryGS3Module.QueryGS3Driver),
+            subtitleFormat: "{address}:**{query_port}**",
+            preview: true,
+            numberPreviewFields: 1,
+            tags: new Tag[] {}
         )
     };
     
