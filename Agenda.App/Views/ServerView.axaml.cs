@@ -9,6 +9,7 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using CommunityToolkit.Mvvm.ComponentModel;
+using Ursa.Controls;
 
 namespace Agenda.Views;
 
@@ -37,6 +38,9 @@ public partial class ServerView : UserControl
 
         this._agendaCore.OnChangeStatusConn += this.OnChangeStatusConn;
         this.SetStatus(this._conn.Driver.State);
+
+        Module module = this._agendaCore.GetModule(this._conn.ModuleId);
+        this.LabelFields.Content = new MarkdownLine() {Markdown = module.GetSubtitle(this._conn.Fields)};
     }
 
     private async ValueTask OnChangeStatusConn(ChangeStatusConnEventArgs eventArgs, CancellationToken token)

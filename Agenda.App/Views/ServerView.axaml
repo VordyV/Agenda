@@ -5,11 +5,12 @@
              mc:Ignorable="d" d:DesignWidth="700" d:DesignHeight="450"
              xmlns:u="https://irihi.tech/ursa"
              x:Class="Agenda.Views.ServerView">
-    <Border Padding="7 0">
-        <Grid RowDefinitions="*, 25">
+    <Border Padding="7 -5">
+        <Grid RowDefinitions="*, 30">
             <ContentControl Grid.Row="0" Name="MainContent"/>
-            <u:Descriptions Grid.Row="1">
+            <u:Descriptions Grid.Row="1" Orientation="Horizontal" >
                 <u:DescriptionsItem Name="LabelStatus" Label="Status" Content="¯\_(ツ)_/¯"/>
+                <u:DescriptionsItem Name="LabelFields" Label="Source" Content="¯\_(ツ)_/¯" Margin="42 0"/>
             </u:Descriptions>
         </Grid> 
     </Border>
