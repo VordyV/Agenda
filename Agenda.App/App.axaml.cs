@@ -26,18 +26,22 @@ public partial class App : Application
         
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
+            #if !DEBUG
             SplashScreen splashScreen = new SplashScreen();
             desktop.MainWindow = splashScreen;
             splashScreen.Show();
 
             await splashScreen.Run();
-
+            #endif
+            
             MainWindow mainWindow = new MainWindow(agendaCore);
             desktop.MainWindow = mainWindow;
             desktop.MainWindow.Closing += async (sender, args) => await agendaCore.Dispose();
             mainWindow.Show();
             
+            #if !DEBUG
             splashScreen.Close();
+            #endif
         }
 
         base.OnFrameworkInitializationCompleted();
