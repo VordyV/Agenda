@@ -10,6 +10,7 @@ using Avalonia.Styling;
 using AvaloniaHex.Document;
 using Ursa.Controls;
 using Avalonia.Threading;
+using EventArgs = System.EventArgs;
 
 namespace Agenda.Modules.QueryGS3Module;
 
@@ -29,16 +30,31 @@ public partial class QueryGS3View : BasicView
 {
     public ObservableCollection<Player> Players { get; set; } = new();
 
+    private DispatcherTimer _timer;
+
     public QueryGS3View(Connection c) : base(c)
     {
         InitializeComponent();
         this.DataContext = this;
+        this._timer = new DispatcherTimer() {Interval = TimeSpan.FromSeconds(5)};
+        this._timer.Tick += this._on_tick_timer_update;
+        this.Conn.OnStop += _on_stop_conn;
         this.Loaded += this._loaded;
     }
 
     public QueryGS3View()
     {
         InitializeComponent();
+    }
+    
+    private void _on_stop_conn()
+    {
+        this._timer.Stop();
+    }
+
+    private async void _on_tick_timer_update(object? sender, EventArgs args)
+    {
+        await this.UpdateData();
     }
 
     private async Task _ping()
@@ -63,6 +79,12 @@ public partial class QueryGS3View : BasicView
     }
 
     private async void _loaded(object? sender, RoutedEventArgs args)
+    {
+        this._timer.Start();
+        await this.UpdateData();
+    }
+
+    public async Task UpdateData()
     {
         _ = this._ping();
         if (this.Conn.Driver is QueryGS3Driver driver)
