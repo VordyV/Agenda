@@ -14,6 +14,9 @@
         <RepositoryUrl>https://github.com/VordyV/Agenda</RepositoryUrl>
         <Company>Vorklab</Company>
         <ApplicationIcon>logo.ico</ApplicationIcon>
+        <AssemblyName>Agenda</AssemblyName>
+        <PackageId>Agenda</PackageId>
+        <Product>Agenda</Product>
     </PropertyGroup>
 
     <ItemGroup>
@@ -33,6 +36,7 @@
       <PackageReference Include="Irihi.Ursa" Version="2.2.0" />
       <PackageReference Include="Irihi.Ursa.Themes.Semi" Version="2.2.0" />
       <PackageReference Include="LiveMarkdown.Avalonia" Version="2.2.0" />
+      <PackageReference Include="Ookii.CommandLine" Version="5.0.0" />
       <PackageReference Include="OpenGSQ" Version="2.1.5" />
       <PackageReference Include="rconnet.dotnet" Version="1.1.1" />
       <PackageReference Include="Semi.Avalonia" Version="12.1.0.1" />
