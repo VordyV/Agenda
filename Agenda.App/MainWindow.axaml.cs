@@ -39,8 +39,9 @@ public partial class MainWindow : Window
             {
                 {"home", (mgr, ptr, arg) => new HomeView(mgr, ptr)},
                 {"server", (mgr, ptr, arg) => new ServerView(mgr, ptr, arg)},
+                {"devmode", (mgr, ptr, arg) => new DevModeView(mgr, ptr)},
             },
-            defaultView: "home"
+            defaultView: this._agendaCore.IsDevMode == false ? "home" : "devmode"
         );
         this._notificationManager = new WindowNotificationManager(this);
         this._notificationManager.Position = NotificationPosition.TopRight;
@@ -52,6 +53,14 @@ public partial class MainWindow : Window
         InitializeComponent();
 
         this.Title = $"Agenda";
+
+        if (this._agendaCore.IsDevMode)
+        {
+            this.Menu.IsVisible = false;
+            this.Title += $" [development mode]";
+        }
+        
+        this.Loaded += this.OnLoaded;
         
         this.MainContent.Content = this._viewPresenter.Content;
         
@@ -60,6 +69,19 @@ public partial class MainWindow : Window
         this._agendaCore.OnStopConn += this.OnStopConn;
         this._agendaCore.OnChangeStatusConn += this.OnChangeStatusConn;
         this._agendaCore.OnError += this.OnError;
+    }
+
+    private async void OnLoaded(object? sender, RoutedEventArgs e)
+    {
+        await this._agendaCore.Init();
+
+        if (this._agendaCore.IsDevMode)
+        {
+            
+            
+            //var context = new DialogContext();
+            //OverlayDialog.ShowCustom(new ConnectForm(this._agendaCore) {DataContext = context}, context, hostId: "main", new OverlayDialogOptions() {CanDragMove = false, CanResize = false, IsCloseButtonVisible = false});
+        }
     }
 
     private async ValueTask OnError(ErrorEventArgs eventArgs, CancellationToken token)
@@ -110,6 +132,8 @@ public partial class MainWindow : Window
     public async ValueTask OnInitConn(InitConnEventArgs eventArgs, CancellationToken token)
     {
         var conn = this._agendaCore.GetConnection(eventArgs.ConnectionId);
+        if (this._agendaCore.IsDevMode) this.Title += $" {conn.ModuleId}:{this._agendaCore.ExternalModulesDir}";
+        
         var ctxPcsForm = new DialogContext();
         var form = new ProcessIndicatorForm((o, args) => conn.Driver?.Cancel()) {DataContext = ctxPcsForm};
 

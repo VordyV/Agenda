@@ -4,10 +4,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="700" d:DesignHeight="450"
         x:Class="Agenda.MainWindow"
+        WindowStartupLocation="CenterScreen"
         xmlns:u="https://irihi.tech/ursa"
         Title="Agenda">
     <Grid RowDefinitions="Auto, *">
-        <Menu Grid.Row="0">
+        <Menu Grid.Row="0" Name="Menu">
             <MenuItem Header="_Profile">
                 <MenuItem Name="MenuItemNew" Header="New" Click="MenuItemNew_OnClick" IsEnabled="True"/>
                 <MenuItem Name="MenuItemOpen" Header="Open" Click="MenuItemOpen_OnClick"/>

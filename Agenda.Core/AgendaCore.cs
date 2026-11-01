@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text.Json;
 using System.Threading.Tasks;
 using BLite.Bson;
 using BLite.Core;
@@ -37,7 +38,8 @@ public class AgendaCore
     private ConcurrentDictionary<string, Connection> _connections = new();
     private ConcurrentDictionary<string, Connection> _previewConnections = new();
     private AppDbContext _appDbContext;
-    private ConcurrentDictionary<string, Assembly> _plugins = new();
+    private ModuleLoader _moduleLoader;
+    
 
     // OnCreateConn
     private AsyncEventHandler<CreateConnEventArgs> _onCreateConn = new(InvokeMode.Parallel);
@@ -64,23 +66,75 @@ public class AgendaCore
     public event AsyncEvent<bool> OnReady { add => _onReady.Register(value); remove => _onReady.Unregister(value); }
 
     public bool IsReady { get; private set; } = false;
+    public string? ModuleId { get; private set; } = null;
     
-    public string PluginEntryPoint { get; set; }
-    public string PluginsDir { get; set; }
+    public string ExternalModulesDir { get; set; }
+    public string ExternalModulesEntryPoint { get; set; }
+    public bool IsDevMode { get; set; } = false;
 
     public AgendaCore()
     {
-        
+        this._moduleLoader = new ModuleLoader(this, "modules", ".am", "manifest.json");
     }
 
     public async Task Init()
     {
+        if (this.IsDevMode)
+        {
+            string moduleId = await this._moduleLoader.LoadProtoModule(this.ExternalModulesDir);
+            this.ModuleId = moduleId;
+            Module module = this.GetModule(moduleId);
+            Dictionary<string, string?> fields = new();
+
+            bool error = false;
+            foreach (var field in module.Fields)
+            {
+                try
+                {
+                    if (field.Value.Required && field.Value.Value == null) throw new Exception($"Field '{field.Key}' must have a default value");
+                    
+                    var validator = module.Fields[field.Key].Validator;
+            
+                    if (validator != null)
+                    {
+                        var validatorResult = validator.Invoke(field.Value.Value);
+            
+                        if (!validatorResult.Success)
+                        {
+                            throw new Exception(validatorResult.Errors[0].ToString());
+                        }
+                    }
+                    
+                    fields.Add(field.Key, field.Value.Value);
+                }
+                catch (Exception e)
+                {
+                    error = true;
+                    this._error(e);
+                }
+            }
+            
+            if (error) return;
+            
+            
+            try
+            {
+                var connId = this.CreateNewConnection(moduleId, fields);
+                if (!await this.InitConnection(connId)) throw new Exception($"Failed to initialize the connection '{connId}'");
+            }
+            catch (Exception e)
+            {
+                this._error(e);
+            }
+            
+            return;
+        }
+        else await this._moduleLoader.LoadModules();
+        
         try
         {
             await Task.Run(() =>
             {
-                //this.LoadPlugins();
-                
                 string dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "agenda");
                 if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
                 string path = Path.Combine(dir, "agenda.db");
@@ -99,7 +153,7 @@ public class AgendaCore
     public void LoadPlugin(string path)
     {
         Assembly asm = Assembly.LoadFrom(path);
-        Type? type = asm.GetType(this.PluginEntryPoint);
+        Type? type = asm.GetType(this.ExternalModulesEntryPoint);
         if (type is null) throw new Exception($"Plugin {path} does not have entry point 1");
         object? instance = Activator.CreateInstance(type);
         FieldInfo? fieldInfo = type.GetField("Module");
@@ -110,7 +164,7 @@ public class AgendaCore
 
     public void LoadPlugins()
     {
-        string[] files = Directory.GetFiles(Path.Combine(Directory.GetCurrentDirectory(), this.PluginsDir));
+        string[] files = Directory.GetFiles(Path.Combine(Directory.GetCurrentDirectory(), this.ExternalModulesDir));
 
         foreach (var file in files)
         {

@@ -17,7 +17,7 @@ public static class Settings
 {
     public static List<Module> Modules = new List<Module>()
     {
-        new Module(
+        /*new Module(
             id: "simple",
             title: "Simple",
             version: "0.1",
@@ -33,7 +33,7 @@ public static class Settings
             preview: true,
             numberPreviewFields: 1,
             tags: new Tag[]{}
-        ),
+        ),*/
         new Module(
             id: "tcpc",
             title: "TCP Client",
@@ -99,8 +99,8 @@ public static class Settings
                                      Agenda is a desktop utility. It is a simple tool to assist in development, modding, and administration of game servers, primarily for Battlefield 2 and Battlefield 2142 servers.
                                      """;
     
-    public static string PluginEntryPoint = "Manifest.Main";
-    public static string PluginsDir = "plugins";
+    public static string ExternalModulesDir = "modules";
+    public static string ExternalModulesEntryPoint = "Manifest.Main";
 
     public static string UpdaterGitHubRep = "https://github.com/VordyV/Agenda";
     public static bool UpdaterPrerelease = true;

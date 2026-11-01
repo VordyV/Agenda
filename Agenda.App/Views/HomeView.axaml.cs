@@ -97,8 +97,12 @@ public partial class HomeView : UserControl
     {
         if (sender is Profile profile) this.UpdatePreviewData(profile);
     }
-    
-    public void RemoveProfile(Profile profile) => this.WrapPanelProfiles.Children.Remove(profile);
+
+    public void RemoveProfile(Profile profile)
+    {
+        this.WrapPanelProfiles.Children.Remove(profile);
+        this.TextBlockCount.Text = this.WrapPanelProfiles.Children.Count.ToString();
+    }
     
     public async Task UpdateProfileData(Profile profile)
     {
